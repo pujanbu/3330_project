@@ -70,6 +70,16 @@ def login():
         return render_template("login.html")
 
 
+@app.route("/logout")
+def logout():
+    # log user out
+
+    # clear session var
+    session.clear()
+
+    return redirect("/login")
+
+
 if __name__ == "__main__":
     with app.app_context():
         # db.drop_all()
