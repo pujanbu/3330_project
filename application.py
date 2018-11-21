@@ -1,10 +1,12 @@
 # main backend entry point
 
 import os
-from flask import Flask, jsonify, request, session, send_file
+from flask import Flask, jsonify, request, session, send_file, flash, render_template, redirect
 from flask_session import Session
 from models import *
 from werkzeug.security import check_password_hash, generate_password_hash
+
+from helpers import login_required
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -26,9 +28,46 @@ db.init_app(app)
 
 
 @app.route("/")
+@login_required
 def index():
     # main app
     return send_file("templates/index.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    # login page handling
+
+    # forget current user
+    session.clear()
+
+    # a post request
+    if request.method == 'POST':
+        # Ensure form was filled
+        if not request.form.get('username'):
+            flash("No username found!")
+            return render_template("login.html")
+        elif not request.form.get('password'):
+            flash("No password found!")
+            return render_template("login.html")
+
+        # query db for user
+        user = Profile.query.filter_by(
+            username=request.form.get('username')).first()
+
+        # check username exists & password match
+        if user is None or not check_password_hash(user.password, request.form.get('password')):
+            flash("Invalid username/password!")
+            return render_template("login.html")
+
+        # remember id
+        session['user_id'] = user.id
+
+        return redirect("/")
+
+    else:
+        # get request
+        return render_template("login.html")
 
 
 if __name__ == "__main__":

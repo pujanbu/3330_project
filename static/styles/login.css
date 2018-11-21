@@ -1,0 +1,70 @@
+.header {
+  font-size: 72px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* main content */
+.name-group {
+  padding: 10px;
+  margin-top: 35px;
+}
+
+.name-group p {
+  opacity: 0.5;
+  padding: 5px;
+}
+
+.name-group input {
+  border: 1px solid gray;
+  padding: 5px;
+  border-radius: 5%;
+}
+
+.pw-group {
+  padding: 10px;
+}
+
+.pw-group p {
+  opacity: 0.5;
+  padding: 5px;
+}
+
+.pw-group input {
+  border: 1px solid gray;
+  padding: 5px;
+  border-radius: 5%;
+}
+
+/* component rules */
+.button {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #00aaff;
+  color: #ffffff;
+  justify-content: center;
+  border-radius: 5%;
+  background-color: #00aaff;
+}
+
+.button2 {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #00aaff;
+  color: #00aaff;
+  justify-content: center;
+  border-radius: 5%;
+  background-color: transparent;
+}
+
+/* responsive mobile */
+@media only screen and (max-width: 600px) {
+  .name-group input {
+    width: 60%;
+    padding: 15px;
+  }
+  .pw-group input {
+    width: 60%;
+    padding: 15px;
+  }
+}
