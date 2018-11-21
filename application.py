@@ -80,6 +80,77 @@ def logout():
     return redirect("/login")
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    # sign up user
+
+    # clear any user
+    session.clear()
+
+    # post request
+    if request.method == 'POST':
+
+        # grab form info into vars
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        email = request.form.get('email')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirmation = request.form.get('confirmation')
+
+        # ensure params are passed
+        if not first_name:
+            flash("No first name found!")
+            return render_template("register.html")
+        elif not last_name:
+            flash("No last name found!")
+            return render_template("register.html")
+        elif not email:
+            flash("No email found!")
+            return render_template("register.html")
+        elif not username:
+            flash("No username found!")
+            return render_template("register.html")
+        elif not password or not confirmation:
+            # Ensure password was submitted
+            flash("No password/confirmation found!")
+            return render_template("register.html")
+        elif password != confirmation:
+            flash("Passwords don't match!")
+            return render_template("register.html")
+
+        # query db for profile with same username
+        user = Profile.query.filter_by(username=username).first()
+
+        # profile with username already exists
+        if user:
+            flash("Username already exists!")
+            return render_template("register.html")
+
+        # query db for profile with same email
+        user = Profile.query.filter_by(email=email).first()
+
+        # profile with email already exists
+        if user:
+            flash("Email already used!")
+            return render_template("register.html")
+
+        # make new user in db
+        new = Profile(first_name, last_name, email, username,
+                      generate_password_hash(password))
+        db.session.add(new)
+        db.session.commit()
+
+        # save user login
+        session['user_id'] = new.id
+
+        return redirect("/")
+
+    else:
+        # send register page
+        return render_template("register.html")
+
+
 if __name__ == "__main__":
     with app.app_context():
         # db.drop_all()
