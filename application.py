@@ -6,7 +6,7 @@ from flask_session import Session
 from models import *
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required
+from helpers import login_required, get_dict, get_dict_array
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -153,6 +153,76 @@ def register():
 # api routes
 
 
+@app.route("/api/page", methods=["GET", "POST"])
+def page_route():
+    """
+        GET:    req: page_id
+                res: page
+
+        POST:   req: name!, desc!, category?
+                res: success
+    """
+
+    if request.method == "POST":
+        # can only do this if logged in
+        # and logged in user will be admin & member
+        if session.get('user_id') is None:
+            return jsonify({"success": False, "message": "Not logged in!"})
+
+        # grab req body
+        body = request.get_json()
+
+        # body validation
+        if not body:
+            return jsonify({"success": False, "message": "No request body!"})
+        if 'name' not in body:
+            return jsonify({"success": False, "message": "Page name not specified!"})
+        if 'desc' not in body:
+            return jsonify({"success": False, "message": "Page description not specified!"})
+
+        # check if category provided
+        category = ''
+        if 'category' in body:
+            category = body['category']
+
+        # check if same nage page exists
+        page = Page.query.filter_by(name=body['name']).first()
+        if page:
+            return jsonify({"success": False, "message": "Page with name already exists!"})
+
+        # create page in db
+        new = Page(body['name'], body['desc'], category)
+        db.session.add(new)
+
+        # grab profile to make him admin & member
+        profile = Profile.query.get(session.get('user_id'))
+        page.admins.append(profile)
+        page.members.append(profile)
+
+        # commit to db
+        db.session.commit()
+
+        return jsonify({"success": True})
+
+    else:
+        # if page_id exists return the page object
+        body = request.get_json()
+
+        # body validation
+        if not body:
+            return jsonify({"success": False, "message": "No request body!"})
+        if 'page_id' not in body:
+            return jsonify({"success": False, "message": "Page id not specified!"})
+
+        # get page from db
+        page = Page.query.get(body['page_id'])
+
+        if not page:
+            return jsonify({"success": False, "message": "Page with page_id doesn't exist!"})
+
+        return jsonify({"success": True, "page": get_dict(page)})
+
+
 @app.route("/api/post", methods=["GET", "POST"])
 def post_route():
     """
@@ -175,6 +245,6 @@ def post_route():
 
 if __name__ == "__main__":
     with app.app_context():
-        # db.drop_all()
+        db.drop_all()
         db.create_all()
     app.run(debug=True, use_reloader=True)
