@@ -240,11 +240,41 @@ def post_route():
     else:
         # if user_id or page_id exists return posts for that
         # else return posts of current logged in user
-        pass
+        body = request.get_json()
+
+        if not body:
+            # return current logged in profile posts
+
+            if session.get('user_id') is None:
+                return jsonify({"success": False, "message": "Profile not logged in!"})
+
+            # grab profile
+            profile = Profile.query.get(session.get('user_id'))
+
+            return jsonify({"success": True, "posts": get_dict_array(profile.posts)})
+
+        elif 'user_id' in body:
+            # return posts for given userid
+
+            # grab profile
+            profile = Profile.query.get(body['user_id'])
+
+            return jsonify({"success": True, "posts": get_dict_array(profile.posts)})
+
+        elif 'page_id' in body:
+            # return posts from page
+
+            # grab page
+            page = Page.query.get(body['page_id'])
+
+            return jsonify({"success": True, "posts": get_dict_array(page.posts)})
+
+        # should not happen
+        return jsonify({"success": False, "message": "Invalid request!"})
 
 
 if __name__ == "__main__":
     with app.app_context():
-        db.drop_all()
+        # db.drop_all()
         db.create_all()
     app.run(debug=True, use_reloader=True)
