@@ -2,7 +2,7 @@ new Vue({
     el: '#app',
     data() {
         return {
-            profile: true,
+            display: "profile",
 
             currentUser: "Safal Lamsal", //logged in user
 
