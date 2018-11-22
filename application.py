@@ -153,6 +153,67 @@ def register():
 # api routes
 
 
+@app.route("/api/profile", methods=["GET", "UPDATE", "DELETE"])
+def profile_route():
+    """
+        GET:    req: profile_id?
+                res: profile
+
+        UPDATE: req:    profile_id?, first_name?, last_name?, mobile_no?,
+                        email?, username?, password?
+                res:    success, profile
+
+        DELETE: req:    [null]
+                res:    success
+    """
+    if request.method == "DELETE":
+        # delete the current user
+
+        if session.get('user_id') is None:
+            return jsonify({"success": False, "message": "Profile not logged in!"})
+
+        # grab user obj and delete
+        profile = Profile.query.get(session.get('user_id'))
+        db.session.delete(profile)
+        db.session.commit()
+
+        # clear the session
+        session.clear()
+
+        return jsonify({"success": True})
+
+    elif request.method == "UPDATE":
+        # update user info
+        pass
+    else:
+        # send back user info if logged in
+        # else send limited info for given profile id
+        body = request.get_json()
+
+        if not body:
+            # send current user if logged in
+            if session.get('user_id') is None:
+                return jsonify({"success": False, "message": "Profile not logged in!"})
+
+            # grab profile from db
+            profile = Profile.query.get(session.get('user_id'))
+
+            return jsonify({"success": True, "profile": get_dict(profile)})
+
+        elif 'profile_id' in body:
+            # profile of profile id
+            profile = Profile.query.get(body['profile_id'])
+
+            if not profile:
+                return jsonify({"success": False, "message": "Profile with id not found!"})
+
+            # TODO: only return non-sensitive info
+            return jsonify({"success": True, "profile": get_dict(profile)})
+
+        # should not happen
+        return jsonify({"success": False, "message": "Invalid request!"})
+
+
 @app.route("/api/page", methods=["GET", "POST"])
 def page_route():
     """
@@ -220,6 +281,10 @@ def page_route():
         if not page:
             return jsonify({"success": False, "message": "Page with page_id doesn't exist!"})
 
+        # increment views
+        page.views += 1
+        db.session.commit()
+
         return jsonify({"success": True, "page": get_dict(page)})
 
 
@@ -257,6 +322,8 @@ def post_route():
             page = Page.query.get(body['page_id'])
             if not page:
                 return jsonify({"success": False, "message": "Page doesn't exist"})
+
+            # TODO: check if user is admin of page
 
             # add post to db
             post = Post(body['type'], body['body'],

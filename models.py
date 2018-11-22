@@ -24,7 +24,7 @@ class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
-    mobile_no = db.Column(db.String(10))
+    mobile_no = db.Column(db.String(10), unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     username = db.Column(db.String(25), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
