@@ -20,6 +20,9 @@ class Profile(db.Model):
     password = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=func.now())
 
+    # relations
+    posts = db.relationship("Post", backref="profile", lazy=True)
+
     def __init__(self, first_name, last_name, email, username, password, mobile_no=""):
         self.first_name = first_name
         self.last_name = last_name
@@ -33,3 +36,13 @@ class Profile(db.Model):
 
     def __str__(self):
         return f'{self.username}'
+
+class Post(db.Model):
+    __tablename__ = "post"
+    id = db.Column(db.Integer, primary_key=True)
+    post_type = db.Column(db.String(10), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=func.now())
+
+    # relationships
+    profile_id = db.Column(db.Integer, db.ForeignKey("profile.id"))

@@ -150,6 +150,28 @@ def register():
         # send register page
         return render_template("register.html")
 
+# api routes
+
+
+@app.route("/api/post", methods=["GET", "POST"])
+def post_route():
+    """
+        GET:    req: user_id?, page_id?
+                res: [posts]
+
+        POST:   req: type!, body!, page_id?
+                res: success
+    """
+
+    if request.method == "POST":
+        # can only do this if logged in for profile
+        # or page if profile is admin
+        pass
+    else:
+        # if user_id or page_id exists return posts for that
+        # else return posts of current logged in user
+        pass
+
 
 if __name__ == "__main__":
     with app.app_context():
