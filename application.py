@@ -236,7 +236,42 @@ def post_route():
     if request.method == "POST":
         # can only do this if logged in for profile
         # or page if profile is admin
-        pass
+
+        if session.get('user_id') is None:
+            return jsonify({"success": False, "message": "Profile not logged in!"})
+
+        # grab req body
+        body = request.get_json()
+
+        if not body:
+            return jsonify({"success": False, "message": "No request body!"})
+        if 'type' not in body:
+            return jsonify({"success": False, "message": "Post type not specified!"})
+        if 'body' not in body:
+            return jsonify({"success": False, "message": "Post body not specified!"})
+
+        # if body has page_id make post from page else make profile post
+        if 'page_id' in body:
+
+            # check if page exists
+            page = Page.query.get(body['page_id'])
+            if not page:
+                return jsonify({"success": False, "message": "Page doesn't exist"})
+
+            # add post to db
+            post = Post(body['type'], body['body'],
+                        None, body['page_id'])
+            db.session.add(post)
+        else:
+            # make current user post
+            post = Post(body['type'], body['body'],
+                        session.get('user_id'), None)
+            db.session.add(post)
+
+        db.session.commit()
+
+        return jsonify({"success": True})
+
     else:
         # if user_id or page_id exists return posts for that
         # else return posts of current logged in user
