@@ -19,7 +19,7 @@
                     <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                         class="userImage">
                     <h2>{{selectedUser}}</h2>
-                    <h2>Date joined: --/--/----</h2>
+                    <h3>Date joined: --/--/----</h3>
                 </div>
                 <div class="createPost">
                     <h2>Create Post</h2>
@@ -37,12 +37,24 @@
                     {{selectedBio}}
                 </div>
                 <div class="postViewArea">
-                    aaa
+                    <div v-for="i in likes" class="post">
+                        <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                            class="postUserImage">
+                        <h3>{{selectedUser}}</h3>
+                        <h5>01-05-2018</h5>
+                        <div class="postContent">
+                            <h4>Haina hola ni</h4>
+                        </div>
+                        <div class="postOptions">
+                            {{likeCount}}<i class="fas fa-thumbs-up likeButton"></i>
+                            <i class="fas fa-comment-alt commentButton"></i>({{commentCount}})&nbspView comments
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="footerArea">
-
+                &copybolchal.ml - boleko bolei boleko bolei
             </div>
         </span>
     </div>
