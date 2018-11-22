@@ -4,6 +4,8 @@
     <title>bolchal.ml - boleko bolei boleko bolei</title>
 
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
 </head>
@@ -14,8 +16,9 @@
         <span v-if="profile">
             <div class="topArea">
                 <div class="userImageArea">
-                    <img src="" class="userImage">
-                    <h2>First Last</h2>
+                    <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                        class="userImage">
+                    <h2>{{selectedUser}}</h2>
                     <h2>Date joined: --/--/----</h2>
                 </div>
                 <div class="createPost">
@@ -23,14 +26,18 @@
                     <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
                     <v-btn color="white" class="postButton">POST</v-btn>
                 </div>
+                <div class="settings">
+                    <i class="fas fa-sign-out-alt"></i><br>
+                    <i class="fas fa-cog"></i>
+                </div>
             </div>
 
             <div class="midArea">
                 <div class="userBioArea">
-                    {{newPost}}
+                    {{selectedBio}}
                 </div>
                 <div class="postViewArea">
-
+                    aaa
                 </div>
             </div>
 

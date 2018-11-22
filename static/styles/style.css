@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Slabo+27px');
 
 html {
-    margin: 5% 20% 5% 20%;
+    margin: 1% 20% 1% 20%;
     font-family: 'Slabo 27px', serif;
 
 }
 
+/* TOP AREA */
 .topArea {
     border: solid 1px black;
     margin: 2px;
@@ -14,6 +15,10 @@ html {
 .userImageArea {
     display: inline-block;
     /* vertical-align: top; */
+}
+
+.userImageArea h2 {
+    margin-left: 10px;
 }
 
 .userImage {
@@ -47,14 +52,48 @@ textarea {
     resize: none;
 }
 
-.midArea {
-    border: solid 1px black;
-    margin: 2px;
+.settings {
+    display: inline-block;
+    vertical-align: top;
+    border: solid 1px rgb(255, 0, 0);
+    height: 220px;
+    margin-top: 10px;
+    margin-left: 50px;
 }
 
-.userBioArea {}
+.fas {
+    font-size: 30px;
+    margin: 5px;
+}
 
-.postViewArea {}
+.fas:hover {
+    transform: scale(1.1);
+}
+
+
+/* MID AREA */
+.midArea {
+    border: solid 1px black;
+}
+
+.userBioArea {
+    display: inline-block;
+    vertical-align: top;
+    border: solid 1px black;
+    width: 200px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.postViewArea {
+    display: inline-block;
+    vertical-align: top;
+    border: solid 1px black;
+    margin-top: 20px;
+    margin-left: 50px;
+    width: 500px;
+    height: 90%;
+}
 
 .footerArea {
     border: solid 1px black;
