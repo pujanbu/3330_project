@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="/static/styles/reset.css">
+    <link rel="stylesheet" href="/static/styles/layout.css">
+    {% block styles %}{% endblock %}
+
+    <title>Bol Chal: {% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <div class="container">
+        {% block main %}{% endblock %}
+        {% if get_flashed_messages() %}
+            <p class="alert" role="alert">
+                {{ get_flashed_messages() | join(" ") }}
+            </p>
+        {% endif %}
+    </div>
+</body>
+
+</html>

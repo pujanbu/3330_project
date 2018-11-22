@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css?family=Slabo+27px");
+
+/* global rules */
+html {
+  font-family: "Slabo 27px", serif;
+}
+
+p {
+  font-size: 12px;
+}
+
+/* wrapper rules */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 20vh;
+}
+
+.alert {
+  margin-top: 15px;
+  color: #ff0000;
+}

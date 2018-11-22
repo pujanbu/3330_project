@@ -1,0 +1,1 @@
+export DATABASE_URL=postgres://efkxpuindxwcoe:de43e9e92cb63b3663c03e15a1456af69b5196240c141489d254d04cd8055346@ec2-75-101-138-26.compute-1.amazonaws.com:5432/d386l5ij090f5o

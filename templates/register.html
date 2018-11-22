@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/styles/register.css">
+{% endblock %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <form method="post" action="/register">
+        <div class="container">
+            <div class="header">
+                <h1><b>Register</b></h1>
+            </div>
+            <div class="field-group">
+                <p>First Name</p>
+                <input autofocus type="text" name="first_name" placeholder="First Name">
+            </div>
+            <div class="field-group">
+                <p>Last Name</p>
+                <input type="text" name="last_name" placeholder="Last Name">
+            </div>
+            <div class="field-group">
+                <p>Email</p>
+                <input type="email" name="email" placeholder="Email">
+            </div>
+            <div class="name-group">
+                <p>Username</p>
+                <input type="text" name="username" placeholder="Username...">
+            </div>
+            <div class="pw-group">
+                <p>Password</p>
+                <input type="password" name="password" placeholder="Password...">
+            </div>
+            <div class="pw-group">
+                <p>Confirm Password</p>
+                <input type="password" name="confirmation" placeholder="Password again...">
+            </div>
+            <button class="button2" onclick="location.href='/login'" type="button">Log In</button>
+            <input class="button" type="submit" value="Register">
+        </div>
+    </form>
+{% endblock %}
