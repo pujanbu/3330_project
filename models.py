@@ -9,16 +9,29 @@ from sqlalchemy.sql import func
 db = SQLAlchemy()
 
 
+# relationship between page and profile where profile is admin of page
+admins = db.Table('admins', db.Column('page_id', db.Integer, db.ForeignKey('page.id'), primary_key=True),
+                  db.Column('profile_id', db.Integer, db.ForeignKey('profile.id'), primary_key=True))
+
+
+# relationship between page and profile where profile is member of page
+members = db.Table('members', db.Column('page_id', db.Integer, db.ForeignKey('page.id'), primary_key=True),
+                   db.Column('profile_id', db.Integer, db.ForeignKey('profile.id'), primary_key=True))
+
+
 class Profile(db.Model):
     __tablename__ = "profile"
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
-    mobile_no = db.Column(db.String(10))
+    mobile_no = db.Column(db.String(10), unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     username = db.Column(db.String(25), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=func.now())
+
+    # relations
+    posts = db.relationship("Post", backref="profile", lazy=True)
 
     def __init__(self, first_name, last_name, email, username, password, mobile_no=""):
         self.first_name = first_name
@@ -29,7 +42,48 @@ class Profile(db.Model):
         self.mobile_no = mobile_no
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<Profile {self.username}>'
 
     def __str__(self):
         return f'{self.username}'
+
+
+class Page(db.Model):
+    __tablename__ = "page"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    desc = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50))
+    views = db.Column(db.Integer, default=0)
+
+    # relations
+    posts = db.relationship("Post", backref="page", lazy=True)
+    admins = db.relationship("Profile", secondary=admins,
+                             lazy=True, backref="pages")
+    members = db.relationship(
+        "Profile", secondary=members, lazy=True, backref="pages")
+
+    def __init__(self, name, desc, category=""):
+        self.name = name
+        self.desc = desc
+        self.category = category
+
+
+class Post(db.Model):
+    __tablename__ = "post"
+    id = db.Column(db.Integer, primary_key=True)
+    post_type = db.Column(db.String(10), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=func.now())
+
+    # relationships
+    profile_id = db.Column(db.Integer, db.ForeignKey("profile.id"))
+    page_id = db.Column(db.Integer, db.ForeignKey("page.id"))
+
+    def __init__(self, post_type, body, profile_id, page_id):
+        self.post_type = post_type
+        self.body = body
+        if profile_id:
+            self.profile_id = profile_id
+        else:
+            self.page_id = page_id
