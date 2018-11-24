@@ -10,13 +10,13 @@ db = SQLAlchemy()
 
 
 # relationship between page and profile where profile is admin of page
-admins = db.Table('admins', db.Column('page_id', db.Integer, db.ForeignKey('page.id'), primary_key=True),
-                  db.Column('profile_id', db.Integer, db.ForeignKey('profile.id'), primary_key=True))
+admins = db.Table('admins', db.Column('page_id', db.Integer, db.ForeignKey('page.id')),
+                  db.Column('profile_id', db.Integer, db.ForeignKey('profile.id')))
 
 
 # relationship between page and profile where profile is member of page
-members = db.Table('members', db.Column('page_id', db.Integer, db.ForeignKey('page.id'), primary_key=True),
-                   db.Column('profile_id', db.Integer, db.ForeignKey('profile.id'), primary_key=True))
+members = db.Table('members', db.Column('page_id', db.Integer, db.ForeignKey('page.id')),
+                   db.Column('profile_id', db.Integer, db.ForeignKey('profile.id')))
 
 
 class Profile(db.Model):
@@ -24,7 +24,7 @@ class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
-    mobile_no = db.Column(db.String(10), unique=True)
+    mobile_no = db.Column(db.String(10))
     email = db.Column(db.String(100), nullable=False, unique=True)
     username = db.Column(db.String(25), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
@@ -58,10 +58,8 @@ class Page(db.Model):
 
     # relations
     posts = db.relationship("Post", backref="page", lazy=True)
-    admins = db.relationship("Profile", secondary=admins,
-                             lazy=True, backref="pages")
-    members = db.relationship(
-        "Profile", secondary=members, lazy=True, backref="pages")
+    admins = db.relationship("Profile", secondary=admins, lazy=True)
+    members = db.relationship("Profile", secondary=members, lazy=True)
 
     def __init__(self, name, desc, category=""):
         self.name = name
