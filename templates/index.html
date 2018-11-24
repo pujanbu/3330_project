@@ -13,14 +13,15 @@
 <body>
     <div id="app">
 
+
         <!-- PROFILE -->
         <span v-if="display=='profile'">
             <div class="topArea">
                 <div class="userImageArea">
                     <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                         class="userImage">
-                    <h2>{{selectedUser}}</h2>
-                    <h3>Date joined: --/--/----</h3>
+                    <h2>{{currentUser.first_name}} {{currentUser.last_name}}</h2>
+                    <h3>Email: {{currentUser.email}}</h3><br>profile
                 </div>
                 <div class="createPost">
                     <h2>Create Post</h2>
@@ -28,8 +29,8 @@
                     <v-btn color="white" class="postButton">POST</v-btn>
                 </div>
                 <div class="settings">
-                    <i class="fas fa-sign-out-alt"></i><br>
-                    <i class="fas fa-cog"></i><br>
+                    <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br>
+                    <i class="fas fa-cog" @click="display='settings'"></i><br>
                     <i class="fas fa-home" @click="display='home'"></i><br>
                     <i class=" fas
                         fa-user-alt" @click="display='profile'"></i>
@@ -38,16 +39,16 @@
 
             <div class="midArea">
                 <div class="userBioArea">
-                    {{selectedBio}}
+
                 </div>
                 <div class="profilePostViewArea">
-                    <div v-for="i in likes" class="post">
+                    <div v-for="p in usersPosts" class="post">
                         <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                             class="postUserImage">
-                        <h3>{{selectedUser}}</h3>
-                        <h5>01-05-2018</h5>
+                        <h3>{{currentUser.first_name}} {{currentUser.last_name}}</h3>
+                        <h5>{{p.date}}</h5>
                         <div class="postContent">
-                            <h4>Haina hola ni</h4>
+                            <h4>{{p.body}}</h4>
                         </div>
                         <div class="postOptions">
                             {{likeCount}}<i class="fas fa-thumbs-up likeButton"></i>
@@ -57,6 +58,7 @@
                 </div>
             </div>
         </span>
+
 
 
         <!-- HOME -->
@@ -65,17 +67,14 @@
                 <div class="userImageArea">
                     <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                         class="userImage">
-                    <h2>{{selectedUser}}</h2>
-                    <h3>Date joined: --/--/----</h3>
+                    <h2>{{currentUser.first_name}} {{currentUser.last_name}}</h2>
+                    <h3>Email: {{currentUser.email}}</h3><br>home
                 </div>
                 <div class="createPost">
-                    <!-- <h2>Create Post</h2>
-                        <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
-                        <v-btn color="white" class="postButton">POST</v-btn> -->
                 </div>
                 <div class="settings">
-                    <i class="fas fa-sign-out-alt"></i><br>
-                    <i class="fas fa-cog"></i><br>
+                    <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br>
+                    <i class="fas fa-cog" @click="display='settings'"></i><br>
                     <i class="fas fa-home" @click="display='home'"></i><br>
                     <i class=" fas
                             fa-user-alt" @click="display='profile'"></i>
@@ -84,13 +83,105 @@
 
             <div class="midArea">
                 <div class="userBioArea">
-                    {{selectedBio}}
+
                 </div>
                 <div class="homePostViewArea">
+                    <div v-for="" class="post">
+                        <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                            class="postUserImage">
+                        <h3>user name</h3>
+                        <h5>date</h5>
+                        <div class="postContent">
+                            <h4>body</h4>
+                        </div>
+                        <div class="postOptions">
+                            {{likeCount}}<i class="fas fa-thumbs-up likeButton"></i>
+                            <i class="fas fa-comment-alt commentButton"></i>({{commentCount}})&nbspView comments
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+
+
+
+        <!-- SETTINGS -->
+        <span v-if="display=='settings'">
+            <div class="topArea">
+                <div class="userImageArea">
+                    <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                        class="userImage">
+                    <h2>{{currentUser.first_name}} {{currentUser.last_name}}</h2>
+                    <h3>Email: {{currentUser.email}}</h3>
+                </div>
+                <div class="createPost">
+                    <h2>Create Page</h2>
+                    <h3>Page name:</h3><input type="text" class="pageInputBox" v-model="newPageName">
+
+                    <h3>Description:</h3><input type="text" class="pageInputBox" v-model="newPageDes">
+                    <h3>Category:</h3><input type="text" class="pageInputBox" v-model="newPageCat"><br>
+                    <v-btn color="white" class="pageCreateButton">Create</v-btn>
+                </div>
+                <div class="settings">
+                    <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br>
+                    <i class="fas fa-cog" @click="display='settings'"></i><br>
+                    <i class="fas fa-home" @click="display='home'"></i><br>
+                    <i class=" fas
+                            fa-user-alt" @click="display='profile'"></i>
+                </div>
+            </div>
+
+            <div class="midArea">
+                <div class="userBioArea">
+                </div>
+                <div class="myPagesViewArea">
+                    <h2>My Pages</h2><br>
+                    <div v-for="p in userPages" class="post">
+                        <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                            class="postUserImage">
+                        <h3 @click="display='page'">{{p.name}}</h3>
+                        <h5>{{p.cat}}</h5>
+                        <div class="postContent">
+                            <h4>{{p.des}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+
+
+
+        <!-- PAGE VIEW -->
+        <span v-if="display=='page'">
+            <div class="topArea">
+                <div class="userImageArea">
+                    <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                        class="userImage">
+                    <h2>{{selectedPage}}</h2>
+                    <h3>Date joined: --/--/----</h3>
+                </div>
+                <div class="createPost">
+                    <h2>Create Post</h2>
+                    <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
+                    <v-btn color="white" class="postButton">POST</v-btn>
+                </div>
+                <div class="settings">
+                    <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br>
+                    <i class="fas fa-cog" @click="display='settings'"></i><br>
+                    <i class="fas fa-home" @click="display='home'"></i><br>
+                    <i class=" fas
+                        fa-user-alt" @click="display='profile'"></i>
+                </div>
+            </div>
+
+            <div class="midArea">
+                <div class="userBioArea">
+                </div>
+                <div class="profilePostViewArea">
                     <div v-for="i in likes" class="post">
                         <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                             class="postUserImage">
-                        <h3>{{selectedUser}}</h3>
+                        <h3>{{selectedPage}}</h3>
                         <h5>01-05-2018</h5>
                         <div class="postContent">
                             <h4>Haina hola ni</h4>
@@ -103,7 +194,6 @@
                 </div>
             </div>
         </span>
-
         <div class="footerArea">
             &copybolchal.ml
         </div>

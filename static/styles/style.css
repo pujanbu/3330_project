@@ -6,6 +6,10 @@ html {
 
 }
 
+a {
+    color: black;
+}
+
 /* TOP AREA */
 .topArea {
     /* border: solid 1px black; */
@@ -140,6 +144,29 @@ h5 {
     font-size: 20px;
     margin-left: 20px;
 }
+
+/* SETTINGS */
+.pageInputBox {
+    width: 200px;
+    border: solid 1px black;
+    font-size: 20px;
+}
+
+.pageCreateButton {
+    height: 20px;
+    /* float: right; */
+}
+
+.myPagesViewArea {
+    display: inline-block;
+    vertical-align: top;
+    /* border: solid 1px black; */
+    margin-top: 50px;
+    margin-left: 50px;
+    width: 500px;
+    height: 90%;
+}
+
 
 .footerArea {
     /* border: solid 1px black; */
