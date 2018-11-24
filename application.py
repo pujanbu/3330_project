@@ -188,19 +188,11 @@ def profile_route():
     else:
         # send back user info if logged in
         # else send limited info for given profile id
-        body = request.get_json()
+        body = {
+            "profile_id": request.args.get('profile_id')
+        }
 
-        if not body:
-            # send current user if logged in
-            if session.get('user_id') is None:
-                return jsonify({"success": False, "message": "Profile not logged in!"})
-
-            # grab profile from db
-            profile = Profile.query.get(session.get('user_id'))
-
-            return jsonify({"success": True, "profile": get_dict(profile)})
-
-        elif 'profile_id' in body:
+        if body['profile_id'] != None:
             # profile of profile id
             profile = Profile.query.get(body['profile_id'])
 
@@ -208,6 +200,16 @@ def profile_route():
                 return jsonify({"success": False, "message": "Profile with id not found!"})
 
             # TODO: only return non-sensitive info
+            return jsonify({"success": True, "profile": get_dict(profile)})
+
+        else:
+            # send current user if logged in
+            if session.get('user_id') is None:
+                return jsonify({"success": False, "message": "Profile not logged in!"})
+
+            # grab profile from db
+            profile = Profile.query.get(session.get('user_id'))
+
             return jsonify({"success": True, "profile": get_dict(profile)})
 
         # should not happen
@@ -267,12 +269,12 @@ def page_route():
 
     else:
         # if page_id exists return the page object
-        body = request.get_json()
+        body = {
+            'page_id': request.args.get('page_id')
+        }
 
         # body validation
-        if not body:
-            return jsonify({"success": False, "message": "No request body!"})
-        if 'page_id' not in body:
+        if body['page_id'] is None:
             return jsonify({"success": False, "message": "Page id not specified!"})
 
         # get page from db
@@ -291,7 +293,7 @@ def page_route():
 @app.route("/api/post", methods=["GET", "POST"])
 def post_route():
     """
-        GET:    req: user_id?, page_id?
+        GET:    req: profile_id?, page_id?
                 res: [posts]
 
         POST:   req: type!, body!, page_id?
@@ -342,34 +344,34 @@ def post_route():
     else:
         # if user_id or page_id exists return posts for that
         # else return posts of current logged in user
-        body = request.get_json()
+        body = {
+            "profile_id": request.args.get('profile_id'),
+            "page_id": request.args.get('page_id')
+        }
 
-        if not body:
-            # return current logged in profile posts
-
-            if session.get('user_id') is None:
-                return jsonify({"success": False, "message": "Profile not logged in!"})
+        if body['profile_id'] != None:
+            # return posts for given profile_id
 
             # grab profile
-            profile = Profile.query.get(session.get('user_id'))
+            profile = Profile.query.get(body['profile_id'])
 
             return jsonify({"success": True, "posts": get_dict_array(profile.posts)})
 
-        elif 'user_id' in body:
-            # return posts for given userid
-
-            # grab profile
-            profile = Profile.query.get(body['user_id'])
-
-            return jsonify({"success": True, "posts": get_dict_array(profile.posts)})
-
-        elif 'page_id' in body:
+        elif body['page_id'] != None:
             # return posts from page
 
             # grab page
             page = Page.query.get(body['page_id'])
 
             return jsonify({"success": True, "posts": get_dict_array(page.posts)})
+
+        else:
+            # return all posts
+
+            # grab all posts
+            posts = Post.query.all()
+
+            return jsonify({"success": True, "posts": get_dict_array(posts)})
 
         # should not happen
         return jsonify({"success": False, "message": "Invalid request!"})
