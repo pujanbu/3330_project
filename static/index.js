@@ -13,12 +13,17 @@ new Vue({
 
             allUserPosts: {},
 
-            selectedProfileId: 1,
+            selectedProfileId: 0,
 
             selectedPage: "Hamro Page",
             selectedBio: "Hey my name is Safal Lamsal and this is my profile.",
 
             newPost: "",
+
+            //PAGE
+            newPageName: "",
+            newPageDes: "",
+            newPageCat: "",
 
             likeCount: 15,
             commentCount: 5
@@ -27,12 +32,22 @@ new Vue({
 
     mounted() {
         this.getMainProfile();
-        this.selectedProfileId = currentUser.id;
-        this.getMainPosts();
-        // this.getPost();
     },
 
     methods: {
+        runAll: function () {
+            this.getMainProfile();
+            this.getMainPosts();
+            this.getAllPosts();
+        },
+
+        userProfileClicked: function (id) {
+            this.selectedProfileId = id;
+            this.display = 'user';
+            this.getProfile();
+            this.getPosts();
+        },
+
         getMainProfile: function () {
             fetch(`/api/profile`)
                 .then(res => res.json())
@@ -40,6 +55,8 @@ new Vue({
                     console.log(data);
                     if (data.success) {
                         this.currentUser = data.profile;
+                        this.selectedProfileId = data.profile.id;
+                        this.runAll();
                     }
                 })
                 .catch(err => console.error(err));
@@ -51,7 +68,19 @@ new Vue({
                 .then(data => {
                     console.log(data);
                     if (data.success) {
-                        this.currentUserPosts = data.profile;
+                        this.currentUserPosts = data.posts;
+                    }
+                })
+                .catch(err => console.error(err));
+        },
+
+        getPosts: function () {
+            fetch(`/api/post?profile_id=${this.selectedProfileId}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        this.selectedUserPosts = data.posts;
                     }
                 })
                 .catch(err => console.error(err));
@@ -63,7 +92,7 @@ new Vue({
                 .then(data => {
                     console.log(data);
                     if (data.success) {
-                        this.allUserPosts = data.profile;
+                        this.allUserPosts = data.posts;
                     }
                 })
                 .catch(err => console.error(err));
@@ -81,19 +110,43 @@ new Vue({
                 .catch(err => console.error(err));
         },
 
-        getPost: function () {
-            fetch(`/api/post?profile_id=${this.selectedProfileId}`)
+        postIt: function () {
+            fetch(`/api/post`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'text',
+                        body: this.newPost,
+                    }),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    if (data.success) {
-                        this.profilePosts = data.posts;
-                    }
                 })
                 .catch(err => console.error(err));
         },
 
-        postIt: function () {
+        createPage: function () {
+            fetch(`/api/post`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: this.newPageName,
+                        desc: this.newPageDes,
+                        category: this.newPageCat,
+                    }),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => console.error(err));
 
         }
 
