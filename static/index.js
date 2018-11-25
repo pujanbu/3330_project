@@ -15,6 +15,9 @@ new Vue({
 
             selectedProfileId: 0,
 
+            selectedPage: {},
+            selectedPageId: 0,
+
             selectedPage: "Hamro Page",
             selectedBio: "Hey my name is Safal Lamsal and this is my profile.",
 
@@ -130,7 +133,7 @@ new Vue({
         },
 
         createPage: function () {
-            fetch(`/api/post`, {
+            fetch(`/api/page`, {
                     method: 'POST',
                     body: JSON.stringify({
                         name: this.newPageName,
@@ -148,6 +151,18 @@ new Vue({
                 })
                 .catch(err => console.error(err));
 
+        },
+
+        getPages: function () {
+            fetch(`/api/page?page_id=${this.selectedPageId}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        this.selectedPage = data.page;
+                    }
+                })
+                .catch(err => console.error(err));
         }
 
     }
