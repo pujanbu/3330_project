@@ -39,7 +39,7 @@ new Vue({
 
     methods: {
         runAll: function () {
-            this.getMainProfile();
+            // this.getMainProfile();
             this.getMainPosts();
             this.getAllPosts();
         },
@@ -128,6 +128,7 @@ new Vue({
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
+                    this.getMainPosts();
                 })
                 .catch(err => console.error(err));
         },
