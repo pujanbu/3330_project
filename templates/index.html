@@ -176,12 +176,12 @@
         <div class="myPagesViewArea">
           <h2>My Pages</h2>
           <br />
-          <div v-for="p in userPages" class="post">
+          <div v-for="p in userPages.adminof" class="post">
             <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3 @click="display='page'">{{ p.name }}</h3>
-            <h5>{{ p.cat }}</h5>
+            <h3 @click="display='page'">{{ p }}</h3>
+            <h5>{{ p }}</h5>
             <div class="postContent">
-              <h4>{{ p.des }}</h4>
+              <h4>{{ p }}</h4>
             </div>
           </div>
         </div>
