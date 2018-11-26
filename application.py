@@ -482,6 +482,77 @@ def comment_route():
         return jsonify({"success": True, "comments": get_dict_array(post.comments)})
 
 
+@app.route("/api/like", methods=["GET", "POST"])
+def like_route():
+    """
+        GET:    req: post_id!
+                res: [like]
+
+        POST:   req: post_id!, page_id?
+                res: success
+    """
+
+    if request.method == 'POST':
+        # add like to post from page_id if specified
+        # else add as current logged in user
+
+        if session.get('user_id') is None:
+            return jsonify({"success": False, "message": "Profile not logged in!"})
+
+        body = request.get_json()
+
+        if not body:
+            return jsonify({"success": False, "message": "Body not found!"})
+        if 'post_id' not in body:
+            return jsonify({"success": False, "message": "Post id required!"})
+
+        if 'page_id' in body:
+            # add like as a page
+            page = Page.query.get(body['page_id'])
+
+            if not page:
+                return jsonify({"success": False, "message": "Page doesn't exist!"})
+
+            like = Like(body['post_id'], None, body['page_id'])
+            db.session.add(like)
+            db.session.commit()
+
+            return jsonify({"success": True})
+        else:
+            # add comment as logged in user
+            like = Like(body['post_id'], session.get('user_id'), None)
+            db.session.add(like)
+            db.session.commit()
+
+            return jsonify({"success": True})
+
+    else:
+        # send post_id's likes
+        post_id = request.args.get('post_id')
+
+        if not post_id:
+            return jsonify({"success": False, "message": "Post id required!"})
+
+        # grab post from db
+        post = Post.query.get(post_id)
+
+        if not post:
+            return jsonify({"success": False, "message": "Post not found!"})
+
+        # build response
+        res = []
+        for like in post.likes:
+            obj = get_dict(like)
+            if like.profile != None:
+                obj['name'] = like.profile.first_name + \
+                    ' ' + like.profile.last_name
+            elif post.page != None:
+                obj['name'] = like.page.name
+                res.append(obj)
+
+        return jsonify({"success": True, "comments": res})
+
+
 if __name__ == "__main__":
     with app.app_context():
         # db.drop_all()

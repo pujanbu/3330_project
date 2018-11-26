@@ -32,6 +32,7 @@ class Profile(db.Model):
 
     # relations
     posts = db.relationship("Post", backref="profile", lazy=True)
+    like = db.relationship("Like", backref="profile", lazy=True)
 
     def __init__(self, first_name, last_name, email, username, password, mobile_no=""):
         self.first_name = first_name
@@ -58,6 +59,7 @@ class Page(db.Model):
 
     # relations
     posts = db.relationship("Post", backref="page", lazy=True)
+    likes = db.relationship("Like", backref="page", lazy=True)
     admins = db.relationship("Profile", secondary=admins,
                              lazy=True, backref=db.backref('adminof', lazy=True))
     members = db.relationship("Profile", secondary=members,
@@ -78,8 +80,11 @@ class Post(db.Model):
 
     # relationships
     comments = db.relationship("Comment", backref="post", lazy=True)
-    profile_id = db.Column(db.Integer, db.ForeignKey("profile.id"))
-    page_id = db.Column(db.Integer, db.ForeignKey("page.id"))
+    likes = db.relationship("Like", backref="post", lazy=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey(
+        "profile.id"))
+    page_id = db.Column(db.Integer, db.ForeignKey(
+        "page.id"))
 
     def __init__(self, post_type, body, profile_id, page_id):
         self.post_type = post_type
@@ -97,12 +102,34 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=func.now())
 
     # relations
-    post_id = db.Column(db.Integer, db.ForeignKey("post.id"))
-    profile_id = db.Column(db.Integer, db.ForeignKey("profile.id"))
-    page_id = db.Column(db.Integer, db.ForeignKey("page.id"))
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        "post.id"))
+    profile_id = db.Column(db.Integer, db.ForeignKey(
+        "profile.id"))
+    page_id = db.Column(db.Integer, db.ForeignKey(
+        "page.id"))
 
     def __init__(self, body, post_id, profile_id, page_id):
         self.body = body
+        self.post_id = post_id
+        if profile_id:
+            self.profile_id = profile_id
+        else:
+            self.page_id = page_id
+
+
+class Like(db.Model):
+    __tablename__ = 'like'
+    id = db.Column(db.Integer, primary_key=True)
+    # relations
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        "post.id"))
+    profile_id = db.Column(db.Integer, db.ForeignKey(
+        "profile.id"))
+    page_id = db.Column(db.Integer, db.ForeignKey(
+        "page.id"))
+
+    def __init__(self, post_id, profile_id, page_id):
         self.post_id = post_id
         if profile_id:
             self.profile_id = profile_id
