@@ -199,8 +199,13 @@ def profile_route():
             if not profile:
                 return jsonify({"success": False, "message": "Profile with id not found!"})
 
+            # add adminof and memberof pages to response
+            res = get_dict(profile)
+            res['adminof'] = get_dict_array(profile.adminof)
+            res['memberof'] = get_dict_array(profile.memberof)
+
             # TODO: only return non-sensitive info
-            return jsonify({"success": True, "profile": get_dict(profile)})
+            return jsonify({"success": True, "profile": res})
 
         else:
             # send current user if logged in
@@ -210,7 +215,12 @@ def profile_route():
             # grab profile from db
             profile = Profile.query.get(session.get('user_id'))
 
-            return jsonify({"success": True, "profile": get_dict(profile)})
+            # add adminof and memberof pages to response
+            res = get_dict(profile)
+            res['adminof'] = get_dict_array(profile.adminof)
+            res['memberof'] = get_dict_array(profile.memberof)
+
+            return jsonify({"success": True, "profile": res})
 
         # should not happen
         return jsonify({"success": False, "message": "Invalid request!"})
@@ -259,8 +269,8 @@ def page_route():
 
         # grab profile to make him admin & member
         profile = Profile.query.get(session.get('user_id'))
-        page.admins.append(profile)
-        page.members.append(profile)
+        new.admins.append(profile)
+        new.members.append(profile)
 
         # commit to db
         db.session.commit()
@@ -376,6 +386,9 @@ def post_route():
         # should not happen
         return jsonify({"success": False, "message": "Invalid request!"})
 
+@app.route("/api/comment", methods=["GET", "POST"])
+def comment_route():
+    pass
 
 if __name__ == "__main__":
     with app.app_context():
