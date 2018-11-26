@@ -58,8 +58,10 @@ class Page(db.Model):
 
     # relations
     posts = db.relationship("Post", backref="page", lazy=True)
-    admins = db.relationship("Profile", secondary=admins, lazy=True)
-    members = db.relationship("Profile", secondary=members, lazy=True)
+    admins = db.relationship("Profile", secondary=admins,
+                             lazy=True, backref=db.backref('adminof', lazy=True))
+    members = db.relationship("Profile", secondary=members,
+                              lazy=True, backref=db.backref('memberof', lazy=True))
 
     def __init__(self, name, desc, category=""):
         self.name = name
@@ -85,3 +87,7 @@ class Post(db.Model):
             self.profile_id = profile_id
         else:
             self.page_id = page_id
+
+# class Comment(db.Model):
+#     __tablename__ = 'comment'
+#     id = db.Column(db.Integer, primary_key=True)
