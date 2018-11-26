@@ -365,7 +365,17 @@ def post_route():
             # grab profile
             profile = Profile.query.get(body['profile_id'])
 
-            return jsonify({"success": True, "posts": get_dict_array(profile.posts)})
+            if not profile:
+                return jsonify({"success": False, "message": "Profile not found"})
+
+            # build response
+            res = []
+            for p in profile.posts:
+                obj = get_dict(p)
+                obj['name'] = profile.first_name + ' ' + profile.last_name
+                res.append(obj)
+
+            return jsonify({"success": True, "posts": res})
 
         elif body['page_id'] != None:
             # return posts from page
@@ -373,7 +383,17 @@ def post_route():
             # grab page
             page = Page.query.get(body['page_id'])
 
-            return jsonify({"success": True, "posts": get_dict_array(page.posts)})
+            if not page:
+                return jsonify({"success": False, "message": "Page not found"})
+
+            # build response
+            res = []
+            for p in page.posts:
+                obj = get_dict(p)
+                obj['name'] = page.name
+                res.append(obj)
+
+            return jsonify({"success": True, "posts": res})
 
         else:
             # return all posts
@@ -381,14 +401,34 @@ def post_route():
             # grab all posts
             posts = Post.query.all()
 
-            return jsonify({"success": True, "posts": get_dict_array(posts)})
+            # build response
+            res = []
+            for post in posts:
+                obj = get_dict(post)
+                if post.profile != None:
+                    obj['name'] = post.profile.first_name + \
+                        ' ' + post.profile.last_name
+                elif post.page != None:
+                    obj['name'] = post.page.name
+                res.append(obj)
+
+            return jsonify({"success": True, "posts": res})
 
         # should not happen
         return jsonify({"success": False, "message": "Invalid request!"})
 
+
 @app.route("/api/comment", methods=["GET", "POST"])
 def comment_route():
+    """
+        GET:    req: post_id!
+                res: comment
+
+        POST:   req: body!, post_id!, page_id?
+                res: success
+    """
     pass
+
 
 if __name__ == "__main__":
     with app.app_context():

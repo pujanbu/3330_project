@@ -77,6 +77,7 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=func.now())
 
     # relationships
+    comments = db.relationship("Comment", backref="post", lazy=True)
     profile_id = db.Column(db.Integer, db.ForeignKey("profile.id"))
     page_id = db.Column(db.Integer, db.ForeignKey("page.id"))
 
@@ -88,6 +89,22 @@ class Post(db.Model):
         else:
             self.page_id = page_id
 
-# class Comment(db.Model):
-#     __tablename__ = 'comment'
-#     id = db.Column(db.Integer, primary_key=True)
+
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=func.now())
+
+    # relations
+    post_id = db.Column(db.Integer, db.ForeignKey("post.id"))
+    profile_id = db.Column(db.Integer, db.ForeignKey("profile.id"))
+    page_id = db.Column(db.Integer, db.ForeignKey("page.id"))
+
+    def __init__(self, body, post_id, profile_id, page_id):
+        self.body = body
+        self.post_id = post_id
+        if profile_id:
+            self.profile_id = profile_id
+        else:
+            self.page_id = page_id
