@@ -427,7 +427,59 @@ def comment_route():
         POST:   req: body!, post_id!, page_id?
                 res: success
     """
-    pass
+
+    if request.method == 'POST':
+        # add comment to post_id from page_id if specified
+        # else add as current logged in user
+
+        if session.get('user_id') is None:
+            return jsonify({"success": False, "message": "Profile not logged in!"})
+
+        body = request.get_json()
+
+        if not body:
+            return jsonify({"success": False, "message": "Body not found!"})
+        if 'body' not in body:
+            return jsonify({"success": False, "message": "Comment body required!"})
+        if 'post_id' not in body:
+            return jsonify({"success": False, "message": "Post id required!"})
+
+        if 'page_id' in body:
+            # add comment as a page
+            page = Page.query.get(body['page_id'])
+
+            if not page:
+                return jsonify({"success": False, "message": "Page doesn't exist!"})
+
+            comment = Comment(
+                body['body'], body['post_id'], None, body['page_id'])
+            db.session.add(comment)
+            db.session.commit()
+
+            return jsonify({"success": True})
+        else:
+            # add comment as logged in user
+            comment = Comment(body['body'], body['post_id'],
+                              session.get('user_id'), None)
+            db.session.add(comment)
+            db.session.commit()
+
+            return jsonify({"success": True})
+
+    else:
+        # send post_id's comments
+        post_id = request.args.get('post_id')
+
+        if not post_id:
+            return jsonify({"success": False, "message": "Post id required!"})
+
+        # grab post from db
+        post = Post.query.get(post_id)
+
+        if not post:
+            return jsonify({"success": False, "message": "Post not found!"})
+
+        return jsonify({"success": True, "comments": get_dict_array(post.comments)})
 
 
 if __name__ == "__main__":
