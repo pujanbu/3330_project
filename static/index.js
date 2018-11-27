@@ -28,6 +28,8 @@ new Vue({
             newPageDes: "",
             newPageCat: "",
 
+            message: "ll",
+
             likeCount: 15,
             commentCount: 5
         }
@@ -35,6 +37,7 @@ new Vue({
 
     mounted() {
         this.getMainProfile();
+        this.getAllPosts();
     },
 
     methods: {
@@ -204,9 +207,13 @@ new Vue({
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    this.getPages();
+                    this.message = data.message;
+                    this.getMainProfile();
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err);
+                    this.message = data.message;
+                });
 
         },
 
