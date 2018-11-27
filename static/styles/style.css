@@ -10,6 +10,11 @@ a {
     color: black;
 }
 
+.title {
+    text-align: center;
+    font-size: 40px;
+}
+
 /* TOP AREA */
 .topArea {
     /* border: solid 1px black; */

@@ -51,6 +51,28 @@ new Vue({
             this.getPosts();
         },
 
+        pageClicked: function (id) {
+            this.selectedPageId = id;
+            this.selectedProfileId = id;
+            this.getPages();
+            this.getPostsP();
+            this.display = 'page';
+        },
+
+        deleteUser: function () {
+            fetch(`/api/profile`, {
+                    method: 'DELETE'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+
+                    }
+                })
+                .catch(err => console.error(err));
+        },
+
         getMainProfile: function () {
             fetch(`/api/profile`)
                 .then(res => res.json())
@@ -79,6 +101,18 @@ new Vue({
 
         getPosts: function () {
             fetch(`/api/post?profile_id=${this.selectedProfileId}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        this.selectedUserPosts = data.posts;
+                    }
+                })
+                .catch(err => console.error(err));
+        },
+
+        getPostsP: function () {
+            fetch(`/api/post?page_id=${this.selectedPageId}`)
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
@@ -133,6 +167,27 @@ new Vue({
                 .catch(err => console.error(err));
         },
 
+        postItP: function () {
+            fetch(`/api/post`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'text',
+                        body: this.newPost,
+                        page_id: this.selectedPageId,
+                    }),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    this.getPostsP();
+                })
+                .catch(err => console.error(err));
+        },
+
         createPage: function () {
             fetch(`/api/page`, {
                     method: 'POST',
@@ -149,6 +204,7 @@ new Vue({
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
+                    this.getPages();
                 })
                 .catch(err => console.error(err));
 

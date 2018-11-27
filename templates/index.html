@@ -14,6 +14,7 @@
   <div id="app">
     <!-- MAIN PROFILE -->
     <span v-if="display=='profile'">
+      <div class="title">Your Profile</div>
       <div class="topArea">
         <div class="userImageArea">
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
@@ -38,12 +39,13 @@
       <div class="midArea">
         <div class="userBioArea"></div>
         <div class="profilePostViewArea">
+          <h2>{{currentUser.first_name}}'s Posts</h2>
           <div v-for="p in currentUserPosts" class="post">
             <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
             <h3>{{ currentUser.first_name }} {{ currentUser.last_name }}</h3>
             <h5>{{ p.created_at }}</h5>
             <div class="postContent">
-              <h4>{{ p.body }}</h4>
+              <h4> {{ p.body }}</h4>
             </div>
             <div class="postOptions">
               {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
@@ -58,6 +60,7 @@
 
     <!-- OTHER USER'S PROFILE -->
     <span v-if="display=='user'">
+      <div class="title">{{selectedUser.first_name}}'s Profile</div>
       <div class="topArea">
         <div class="userImageArea">
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
@@ -66,7 +69,7 @@
           <br />{{ selectedProfileId }}
         </div>
         <div class="createPost">
-          <h2>{{ selectedUser.first_name }}'s Post</h2>
+          <h2>{{ selectedUser.first_name }}'s Posts</h2>
         </div>
         <div class="settings">
           <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
@@ -87,7 +90,7 @@
             </h3>
             <h5>{{ p.created_at }}</h5>
             <div class="postContent">
-              <h4>{{ p.body }}</h4>
+              <h4> {{ p.body }}</h4>
             </div>
             <div class="postOptions">
               {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
@@ -102,6 +105,7 @@
 
     <!-- HOME -->
     <span v-if="display=='home'">
+      <div class="title">Your Home</div>
       <div class="topArea">
         <div class="userImageArea">
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
@@ -130,7 +134,7 @@
             </h3>
             <h5>{{ p.created_at }}</h5>
             <div class="postContent">
-              <h4>{{ p.body }}</h4>
+              <h4> {{ p.body }}</h4>
             </div>
             <div class="postOptions">
               {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
@@ -145,11 +149,15 @@
 
     <!-- SETTINGS -->
     <span v-if="display=='settings'">
+      <div class="title">Your Settings</div>
       <div class="topArea">
         <div class="userImageArea">
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
           <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
           <h3>Email: {{ currentUser.email }}</h3>
+          <h5>Delete your profile?</h5>
+          <h6>It cannot be restored once deleted.</h6>
+          <v-btn color="white" class="pageCreateButton" @click="deleteUser">Delete</v-btn>
         </div>
         <div class="createPost">
           <h2>Create Page</h2>
@@ -176,12 +184,13 @@
         <div class="myPagesViewArea">
           <h2>My Pages</h2>
           <br />
-          <div v-for="p in userPages" class="post">
+          <div v-for="p in currentUser.adminof" class="post">
             <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3 @click="display='page'">{{ p }}</h3>
-            <h5>{{ p }}</h5>
+            <h3 @click="pageClicked(p.id)">{{ p.name }}</h3>
+            <h5>Views:{{p.views}}</h5>
+            <h5>Category: {{ p.category }}</h5>
             <div class="postContent">
-              <h4>{{ p }}</h4>
+              <h4>Description: {{ p.desc }}</h4>
             </div>
           </div>
         </div>
@@ -190,16 +199,17 @@
 
     <!-- PAGE VIEW -->
     <span v-if="display=='page'">
+      <div class="title">{{selectedPage.name}}'s Profile</div>
       <div class="topArea">
         <div class="userImageArea">
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
-          <h2>{{ selectedPage }}</h2>
-          <h3>Date joined: --/--/----</h3>
+          <h2>{{ selectedPage.name }}</h2>
+          <h3>Total Views: {{selectedPage.views}}</h3>
         </div>
         <div class="createPost">
           <h2>Create Post</h2>
           <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
-          <v-btn color="white" class="postButton">POST</v-btn>
+          <v-btn color="white" class="postButton" @click="postItP">POST</v-btn>
         </div>
         <div class="settings">
           <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
@@ -213,12 +223,13 @@
       <div class="midArea">
         <div class="userBioArea"></div>
         <div class="profilePostViewArea">
-          <div v-for="i in likes" class="post">
+          <h2>{{selectedPage.name}}'s Posts</h2>
+          <div v-for="p in selectedUserPosts" class="post">
             <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3>{{ selectedPage }}</h3>
-            <h5>01-05-2018</h5>
+            <h3>{{ selectedPage.name }}</h3>
+            <h5>{{ p.created_at }}</h5>
             <div class="postContent">
-              <h4>Haina hola ni</h4>
+              <h4> {{ p.body }}</h4>
             </div>
             <div class="postOptions">
               {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
