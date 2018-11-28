@@ -1,272 +1,405 @@
 <html>
+  <head>
+    <title>Bol Chal</title>
 
-<head>
-  <title>Bol Chal</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+      integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  </head>
 
-  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-    crossorigin="anonymous" />
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
-</head>
-
-<body>
-  <div id="app">
-    <!-- MAIN PROFILE -->
-    <span v-if="display=='profile'">
-      <div class="title">Your Profile</div>
-      <div class="topArea">
-        <div class="userImageArea">
-          <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
-          <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
-          <h3>Email: {{ currentUser.email }}</h3>
-          <br />
-        </div>
-        <div class="createPost">
-          <h2>Create Post</h2>
-          <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
-          <v-btn color="white" class="postButton" @click="postIt">POST</v-btn>
-        </div>
-        <div class="settings">
-          <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
-          <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="clickedHome"></i><br />
-          <i class=" fas
-                        fa-user-alt" @click="display='profile'"></i>
-        </div>
-      </div>
-
-      <div class="midArea">
-        <div class="userBioArea"></div>
-        <div class="profilePostViewArea">
-          <h2>{{currentUser.first_name}}'s Posts</h2>
-          <div v-for="p in currentUserPosts" class="post">
-            <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3>{{ currentUser.first_name }} {{ currentUser.last_name }}</h3>
-            <h5>{{ p.created_at }}</h5>
-            <div class="postContent">
-              <h4> {{ p.body }}</h4>
-            </div>
-            <div class="postOptions">
-              {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
-              <i class="fas fa-comment-alt commentButton"></i>({{
-              commentCount
-              }})&nbspView comments
-            </div>
+  <body>
+    <div id="app">
+      <!-- MAIN PROFILE -->
+      <span v-if="display=='profile'">
+        <div class="title">Your Profile</div>
+        <div class="topArea">
+          <div class="userImageArea">
+            <img
+              src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+              class="userImage"
+            />
+            <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
+            <h3>Email: {{ currentUser.email }}</h3>
+            <br />
           </div>
-        </div>
-      </div>
-    </span>
-
-    <!-- OTHER USER'S PROFILE -->
-    <span v-if="display=='user'">
-      <div class="title">{{selectedUser.first_name}}'s Profile</div>
-      <div class="topArea">
-        <div class="userImageArea">
-          <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
-          <h2>{{ selectedUser.first_name }} {{ selectedUser.last_name }}</h2>
-          <h3>Email: {{ selectedUser.email }}</h3>
-          <br />
-        </div>
-        <div class="createPost">
-          <h2>{{ selectedUser.first_name }}'s Posts</h2>
-        </div>
-        <div class="settings">
-          <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
-          <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="clickedHome"></i><br />
-          <i class=" fas
-                            fa-user-alt" @click="display='profile'"></i>
-        </div>
-      </div>
-
-      <div class="midArea">
-        <div class="userBioArea"></div>
-        <div class="HomePostViewArea">
-          <div v-for="p in selectedUserPosts" class="post">
-            <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3>
-              {{ selectedUser.first_name }} {{ selectedUser.last_name }}
-            </h3>
-            <h5>{{ p.created_at }}</h5>
-            <div class="postContent">
-              <h4> {{ p.body }}</h4>
-            </div>
-            <div class="postOptions">
-              {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
-              <i class="fas fa-comment-alt commentButton"></i>({{
-              commentCount
-              }})&nbspView comments
-            </div>
-          </div>
-        </div>
-      </div>
-    </span>
-
-    <!-- HOME -->
-    <span v-if="display=='home'">
-      <div class="title">Your Home</div>
-      <div class="topArea">
-        <div class="userImageArea">
-          <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
-          <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
-          <h3>Email: {{ currentUser.email }}</h3>
-        </div>
-        <div class="createPost">
-          <h2>All Posts</h2>
-        </div>
-        <div class="settings">
-          <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
-          <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="clickedHome"></i><br />
-          <i class=" fas
-                            fa-user-alt" @click="display='profile'"></i>
-        </div>
-      </div>
-
-      <div class="midArea">
-        <div class="userBioArea"></div>
-        <div class="homePostViewArea">
-          <div v-for="p in allUserPosts" class="post">
-            <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3 @click="userProfileClicked(p)">
-              {{ p.name }}
-            </h3>
-            <h5>{{ p.created_at }}</h5>
-            <div class="postContent">
-              <h4> {{ p.body }}</h4>
-            </div>
-            <div class="postOptions">
-              {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
-              <i class="fas fa-comment-alt commentButton"></i>({{
-              commentCount
-              }})&nbspView comments
-            </div>
-          </div>
-        </div>
-      </div>
-    </span>
-
-    <!-- SETTINGS -->
-    <span v-if="display=='settings'">
-      <div class="title">Your Settings</div>
-      <div class="topArea">
-        <div class="userImageArea">
-          <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
-          <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
-          <h3>Email: {{ currentUser.email }}</h3>
-          <h5>Delete your profile?</h5>
-          <h6>It cannot be restored once deleted.</h6>
-          <v-btn color="white" class="pageCreateButton" @click="deleteUser">Delete</v-btn>
-        </div>
-        <div class="createPost">
-          <h2>Create Page</h2>
-          <h3>Page name:</h3>
-          <input type="text" class="pageInputBox" v-model="newPageName" />
-
-          <h3>Description:</h3>
-          <input type="text" class="pageInputBox" v-model="newPageDes" />
-          <h3>Category:</h3>
-          <input type="text" class="pageInputBox" v-model="newPageCat" /><br />
-          <v-btn color="white" class="pageCreateButton" @click="createPage">Create</v-btn>
-        </div>
-        <div class="settings">
-          <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
-          <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="clickedHome"></i><br />
-          <i class=" fas
-                            fa-user-alt" @click="display='profile'"></i>
-        </div>
-      </div>
-
-      <div class="midArea">
-        <div class="userBioArea"></div>
-        <div class="myPagesViewArea">
-          <h2>My Pages</h2>
-          <br />
-          <div v-for="p in currentUser.adminof" class="post">
-            <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3 @click="pageClicked(p.id)">{{ p.name }}</h3>
-            <h5>Views:{{p.views}}</h5>
-            <h5>Category: {{ p.category }}</h5>
-            <div class="postContent">
-              <h4>Description: {{ p.desc }}</h4>
-              <!-- <h5>Delete this page?</h5>
-                <h6>It cannot be restored once deleted.</h6> -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </span>
-
-    <!-- PAGE VIEW -->
-    <span v-if="display=='page'">
-      <div class="title">{{selectedPage.name}}'s Profile</div>
-      <div class="topArea">
-        <div class="userImageArea">
-          <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
-          <h2>{{ selectedPage.name }}</h2>
-          <h3>Total Views: {{selectedPage.views}}</h3>
-          <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="updatePageC(selectedPage.id)">Update</v-btn>
-          <!-- <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="deletePage">Delete</v-btn> -->
-        </div>
-        <div class="createPost">
-          <div v-if="checkAdmin">
+          <div class="createPost">
             <h2>Create Post</h2>
-            <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
-            <v-btn color="white" class="postButton" @click="postItP">POST</v-btn>
+            <textarea
+              v-model="newPost"
+              rows="4"
+              cols="50"
+              class="postInput"
+            ></textarea>
+            <v-btn color="white" class="postButton" @click="postIt">POST</v-btn>
+          </div>
+          <div class="settings">
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
+            <i class="fas fa-cog" @click="display='settings'"></i><br />
+            <i class="fas fa-home" @click="clickedHome"></i><br />
+            <i
+              class=" fas
+                        fa-user-alt"
+              @click="display='profile'"
+            ></i>
+          </div>
+        </div>
 
-            <div v-if="pageUpdate=='1'">
-              <h2>Create Page</h2>
-              <h3>Page name:</h3>
-              <input type="text" class="pageInputBox" v-model="newPageName" />
-
-              <h3>Description:</h3>
-              <input type="text" class="pageInputBox" v-model="newPageDes" />
-              <h3>Category:</h3>
-              <input type="text" class="pageInputBox" v-model="newPageCat" /><br />
-              <v-btn color="white" class="pageCreateButton" @click="updatePage">Update</v-btn>
+        <div class="midArea">
+          <div class="userBioArea">
+            <h3>Available Users/Pages:</h3>
+            <div class="usersList">
+              <ol>
+                <li
+                  v-for="user in allUserPosts"
+                  @click="userProfileClicked(user)"
+                >
+                  {{ user.name }}
+                </li>
+              </ol>
+            </div>
+          </div>
+          <div class="profilePostViewArea">
+            <h2>{{ currentUser.first_name }}'s Posts</h2>
+            <div v-for="p in currentUserPosts.slice().reverse()" class="post">
+              <img
+                src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                class="postUserImage"
+              />
+              <h3>{{ currentUser.first_name }} {{ currentUser.last_name }}</h3>
+              <h5>{{ p.created_at }}</h5>
+              <div class="postContent">
+                <h4>{{ p.body }}</h4>
+              </div>
+              <div class="postOptions">
+                {{ p.likes.length
+                }}<i
+                  class="fas fa-thumbs-up likeButton"
+                  @click="likeClicked(p.id)"
+                ></i>
+                <i class="fas fa-comment-alt commentButton"></i>({{
+                  commentCount
+                }})&nbspView comments
+              </div>
             </div>
           </div>
         </div>
-        <div class="settings">
-          <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
-          <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="clickedHome"></i><br />
-          <i class=" fas
-                        fa-user-alt" @click="display='profile'"></i>
-        </div>
-      </div>
+      </span>
 
-      <div class="midArea">
-        <div class="userBioArea">
-          <h3>Category: {{selectedPage.category}}</h3>
-          <h3>Description: {{selectedPage.desc}}</h3>
+      <!-- OTHER USER'S PROFILE -->
+      <span v-if="display=='user'">
+        <div class="title">{{ selectedUser.first_name }}'s Profile</div>
+        <div class="topArea">
+          <div class="userImageArea">
+            <img
+              src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+              class="userImage"
+            />
+            <h2>{{ selectedUser.first_name }} {{ selectedUser.last_name }}</h2>
+            <h3>Email: {{ selectedUser.email }}</h3>
+            <br />
+          </div>
+          <div class="createPost">
+            <h2>{{ selectedUser.first_name }}'s Posts</h2>
+          </div>
+          <div class="settings">
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
+            <i class="fas fa-cog" @click="display='settings'"></i><br />
+            <i class="fas fa-home" @click="clickedHome"></i><br />
+            <i
+              class=" fas
+                            fa-user-alt"
+              @click="display='profile'"
+            ></i>
+          </div>
         </div>
-        <div class="profilePostViewArea" v-if="pageUpdate=='0'">
-          <h2>{{selectedPage.name}}'s Posts</h2>
-          <div v-for="p in selectedUserPosts" class="post">
-            <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3>{{ selectedPage.name }}</h3>
-            <h5>{{ p.created_at }}</h5>
-            <div class="postContent">
-              <h4> {{ p.body }}</h4>
-            </div>
-            <div class="postOptions">
-              {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
-              <i class="fas fa-comment-alt commentButton"></i>({{
-              commentCount
-              }})&nbspView comments
+
+        <div class="midArea">
+          <div class="userBioArea"></div>
+          <div class="HomePostViewArea">
+            <div v-for="p in selectedUserPosts.slice().reverse()" class="post">
+              <img
+                src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                class="postUserImage"
+              />
+              <h3>
+                {{ selectedUser.first_name }} {{ selectedUser.last_name }}
+              </h3>
+              <h5>{{ p.created_at }}</h5>
+              <div class="postContent">
+                <h4>{{ p.body }}</h4>
+              </div>
+              <div class="postOptions">
+                {{ p.likes.length
+                }}<i
+                  class="fas fa-thumbs-up likeButton"
+                  @click="likeClicked(p.id)"
+                ></i>
+                <i class="fas fa-comment-alt commentButton"></i>({{
+                  commentCount
+                }})&nbspView comments
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </span>
-    <!-- <div class="footerArea">&copybolchal.ml</div> -->
-  </div>
-</body>
+      </span>
 
-<script src="/static/index.js"></script>
-<link rel="stylesheet" href="/static/styles/style.css" />
+      <!-- HOME -->
+      <span v-if="display=='home'">
+        <div class="title">Your Home</div>
+        <div class="topArea">
+          <div class="userImageArea">
+            <img
+              src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+              class="userImage"
+            />
+            <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
+            <h3>Email: {{ currentUser.email }}</h3>
+          </div>
+          <div class="createPost"><h2>All Posts</h2></div>
+          <div class="settings">
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
+            <i class="fas fa-cog" @click="display='settings'"></i><br />
+            <i class="fas fa-home" @click="clickedHome"></i><br />
+            <i
+              class=" fas
+                            fa-user-alt"
+              @click="display='profile'"
+            ></i>
+          </div>
+        </div>
 
+        <div class="midArea">
+          <div class="userBioArea">
+            <h3>Available Users/Pages:</h3>
+            <div class="usersList">
+              <ol>
+                <li
+                  v-for="user in allUserPosts"
+                  @click="userProfileClicked(user)"
+                >
+                  {{ user.name }}
+                </li>
+              </ol>
+            </div>
+          </div>
+          <div class="homePostViewArea">
+            <div v-for="p in allUserPosts.slice().reverse()" class="post">
+              <img
+                src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                class="postUserImage"
+              />
+              <h3 @click="userProfileClicked(p)">{{ p.name }}</h3>
+              <h5>{{ p.created_at }}</h5>
+              <div class="postContent">
+                <h4>{{ p.body }}</h4>
+              </div>
+              <div class="postOptions">
+                {{ p.likes.length
+                }}<i
+                  class="fas fa-thumbs-up likeButton"
+                  @click="likeClicked(p.id)"
+                ></i>
+                <i class="fas fa-comment-alt commentButton"></i>({{
+                  commentCount
+                }})&nbspView comments
+              </div>
+            </div>
+          </div>
+        </div>
+      </span>
+
+      <!-- SETTINGS -->
+      <span v-if="display=='settings'">
+        <div class="title">Your Settings</div>
+        <div class="topArea">
+          <div class="userImageArea">
+            <img
+              src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+              class="userImage"
+            />
+            <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
+            <h3>Email: {{ currentUser.email }}</h3>
+            <h5>Delete your profile?</h5>
+            <h6>It cannot be restored once deleted.</h6>
+            <v-btn color="white" class="pageCreateButton" @click="deleteUser"
+              >Delete</v-btn
+            >
+          </div>
+          <div class="createPost">
+            <h2>Create Page</h2>
+            <h3>Page name:</h3>
+            <input type="text" class="pageInputBox" v-model="newPageName" />
+
+            <h3>Description:</h3>
+            <input type="text" class="pageInputBox" v-model="newPageDes" />
+            <h3>Category:</h3>
+            <input
+              type="text"
+              class="pageInputBox"
+              v-model="newPageCat"
+            /><br />
+            <v-btn color="white" class="pageCreateButton" @click="createPage"
+              >Create</v-btn
+            >
+          </div>
+          <div class="settings">
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
+            <i class="fas fa-cog" @click="display='settings'"></i><br />
+            <i class="fas fa-home" @click="clickedHome"></i><br />
+            <i
+              class=" fas
+                            fa-user-alt"
+              @click="display='profile'"
+            ></i>
+          </div>
+        </div>
+
+        <div class="midArea">
+          <div class="userBioArea">
+            <h3>Available Users/Pages:</h3>
+            <div class="usersList">
+              <ol>
+                <li
+                  v-for="user in allUserPosts"
+                  @click="userProfileClicked(user)"
+                >
+                  {{ user.name }}
+                </li>
+              </ol>
+            </div>
+          </div>
+          <div class="myPagesViewArea">
+            <h2>My Pages</h2>
+            <br />
+            <div v-for="p in currentUser.adminof" class="post">
+              <img
+                src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                class="postUserImage"
+              />
+              <h3 @click="pageClicked(p.id)">{{ p.name }}</h3>
+              <h5>Views:{{ p.views }}</h5>
+              <h5>Category: {{ p.category }}</h5>
+              <div class="postContent">
+                <h4>Description: {{ p.desc }}</h4>
+                <!--
+                  <h5>Delete this page?</h5>
+                  <h6>It cannot be restored once deleted.</h6>
+                -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </span>
+
+      <!-- PAGE VIEW -->
+      <span v-if="display=='page'">
+        <div class="title">{{ selectedPage.name }}'s Profile</div>
+        <div class="topArea">
+          <div class="userImageArea">
+            <img
+              src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+              class="userImage"
+            />
+            <h2>{{ selectedPage.name }}</h2>
+            <h3>Total Views: {{ selectedPage.views }}</h3>
+            <v-btn
+              color="white"
+              class="pageCreateButton"
+              v-if="checkAdmin"
+              @click="updatePageC(selectedPage.id)"
+              >Update</v-btn
+            >
+            <!--
+              <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="deletePage">Delete</v-btn>
+            -->
+          </div>
+          <div class="createPost">
+            <div v-if="checkAdmin">
+              <h2>Create Post</h2>
+              <textarea
+                v-model="newPost"
+                rows="4"
+                cols="50"
+                class="postInput"
+              ></textarea>
+              <v-btn color="white" class="postButton" @click="postItP"
+                >POST</v-btn
+              >
+
+              <div v-if="pageUpdate=='1'">
+                <h2>Create Page</h2>
+                <h3>Page name:</h3>
+                <input type="text" class="pageInputBox" v-model="newPageName" />
+
+                <h3>Description:</h3>
+                <input type="text" class="pageInputBox" v-model="newPageDes" />
+                <h3>Category:</h3>
+                <input
+                  type="text"
+                  class="pageInputBox"
+                  v-model="newPageCat"
+                /><br />
+                <v-btn
+                  color="white"
+                  class="pageCreateButton"
+                  @click="updatePage"
+                  >Update</v-btn
+                >
+              </div>
+            </div>
+          </div>
+          <div class="settings">
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
+            <i class="fas fa-cog" @click="display='settings'"></i><br />
+            <i class="fas fa-home" @click="clickedHome"></i><br />
+            <i
+              class=" fas
+                        fa-user-alt"
+              @click="display='profile'"
+            ></i>
+          </div>
+        </div>
+
+        <div class="midArea">
+          <div class="userBioArea">
+            <h3>Category: {{ selectedPage.category }}</h3>
+            <h3>Description: {{ selectedPage.desc }}</h3>
+          </div>
+          <div class="profilePostViewArea" v-if="pageUpdate=='0'">
+            <h2>{{ selectedPage.name }}'s Posts</h2>
+            <div v-for="p in selectedUserPosts.slice().reverse()" class="post">
+              <img
+                src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
+                class="postUserImage"
+              />
+              <h3>{{ selectedPage.name }}</h3>
+              <h5>{{ p.created_at }}</h5>
+              <div class="postContent">
+                <h4>{{ p.body }}</h4>
+              </div>
+              <div class="postOptions">
+                {{ p.likes.length }}<i class="fas fa-thumbs-up likeButton"></i>
+                <i class="fas fa-comment-alt commentButton"></i>({{
+                  commentCount
+                }})&nbspView comments
+              </div>
+            </div>
+          </div>
+        </div>
+      </span>
+      <!-- <div class="footerArea">&copybolchal.ml</div> -->
+    </div>
+  </body>
+
+  <script src="/static/index.js"></script>
+  <link rel="stylesheet" href="/static/styles/style.css" />
 </html>
