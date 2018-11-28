@@ -94,14 +94,17 @@ new Vue({
                 .catch(err => console.error(err));
         },
 
-        updatePageC: function () {
+        updatePageC: function (id) {
             this.pageUpdate = '1';
+            this.selectedPageId = id;
+            this.getPages();
         },
 
         updatePage: function () {
             fetch(`/api/page`, {
-                    method: 'POST',
+                    method: 'UPDATE',
                     body: JSON.stringify({
+                        page_id: this.selectedPageId,
                         name: this.newPageName,
                         desc: this.newPageDes,
                         category: this.newPageCat,

@@ -207,7 +207,7 @@
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
           <h2>{{ selectedPage.name }}</h2>
           <h3>Total Views: {{selectedPage.views}}</h3>
-          <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="updatePageC">Update</v-btn>
+          <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="updatePageC(selectedPage.id)">Update</v-btn>
           <!-- <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="deletePage">Delete</v-btn> -->
         </div>
         <div class="createPost">
