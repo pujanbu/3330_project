@@ -277,7 +277,7 @@ new Vue({
         },
 
         likeClicked: function (id) {
-            fetch(`/api/page`, {
+            fetch(`/api/like`, {
                     method: 'POST',
                     body: JSON.stringify({
                         post_id: id
