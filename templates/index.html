@@ -69,7 +69,7 @@
           </div>
           <div class="profilePostViewArea">
             <h2>{{ currentUser.first_name }}'s Posts</h2>
-            <div v-for="p in currentUserPosts" class="post">
+            <div v-for="p in currentUserPosts.slice().reverse()" class="post">
               <img
                 src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                 class="postUserImage"
@@ -125,7 +125,7 @@
         <div class="midArea">
           <div class="userBioArea"></div>
           <div class="HomePostViewArea">
-            <div v-for="p in selectedUserPosts" class="post">
+            <div v-for="p in selectedUserPosts.slice().reverse()" class="post">
               <img
                 src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                 class="postUserImage"
@@ -192,7 +192,7 @@
             </div>
           </div>
           <div class="homePostViewArea">
-            <div v-for="p in allUserPosts" class="post">
+            <div v-for="p in allUserPosts.slice().reverse()" class="post">
               <img
                 src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                 class="postUserImage"
@@ -376,7 +376,7 @@
           </div>
           <div class="profilePostViewArea" v-if="pageUpdate=='0'">
             <h2>{{ selectedPage.name }}'s Posts</h2>
-            <div v-for="p in selectedUserPosts" class="post">
+            <div v-for="p in selectedUserPosts.slice().reverse()" class="post">
               <img
                 src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg"
                 class="postUserImage"
