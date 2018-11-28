@@ -191,6 +191,8 @@
             <h5>Category: {{ p.category }}</h5>
             <div class="postContent">
               <h4>Description: {{ p.desc }}</h4>
+              <!-- <h5>Delete this page?</h5>
+                <h6>It cannot be restored once deleted.</h6> -->
             </div>
           </div>
         </div>
@@ -205,12 +207,26 @@
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
           <h2>{{ selectedPage.name }}</h2>
           <h3>Total Views: {{selectedPage.views}}</h3>
+          <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="updatePageC">Update</v-btn>
+          <!-- <v-btn color="white" class="pageCreateButton" v-if="checkAdmin" @click="deletePage">Delete</v-btn> -->
         </div>
         <div class="createPost">
           <div v-if="checkAdmin">
             <h2>Create Post</h2>
             <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
             <v-btn color="white" class="postButton" @click="postItP">POST</v-btn>
+
+            <div v-if="pageUpdate=='1'">
+              <h2>Create Page</h2>
+              <h3>Page name:</h3>
+              <input type="text" class="pageInputBox" v-model="newPageName" />
+
+              <h3>Description:</h3>
+              <input type="text" class="pageInputBox" v-model="newPageDes" />
+              <h3>Category:</h3>
+              <input type="text" class="pageInputBox" v-model="newPageCat" /><br />
+              <v-btn color="white" class="pageCreateButton" @click="updatePage">Update</v-btn>
+            </div>
           </div>
         </div>
         <div class="settings">
@@ -227,7 +243,7 @@
           <h3>Category: {{selectedPage.category}}</h3>
           <h3>Description: {{selectedPage.desc}}</h3>
         </div>
-        <div class="profilePostViewArea">
+        <div class="profilePostViewArea" v-if="pageUpdate=='0'">
           <h2>{{selectedPage.name}}'s Posts</h2>
           <div v-for="p in selectedUserPosts" class="post">
             <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />

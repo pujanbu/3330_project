@@ -29,6 +29,7 @@ new Vue({
             newPageCat: "",
 
             checkAdmin: false,
+            pageUpdate: '0',
 
             likeCount: 15,
             commentCount: 5
@@ -75,6 +76,7 @@ new Vue({
             this.selectedProfileId = id;
             this.getPages();
             this.getPostsP();
+            this.pageUpdate = '0';
             this.display = 'page';
         },
 
@@ -90,6 +92,34 @@ new Vue({
                     }
                 })
                 .catch(err => console.error(err));
+        },
+
+        updatePageC: function () {
+            this.pageUpdate = '1';
+        },
+
+        updatePage: function () {
+            fetch(`/api/page`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: this.newPageName,
+                        desc: this.newPageDes,
+                        category: this.newPageCat,
+                    }),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    this.updatePage = '0';
+                    this.getMainProfile();
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         },
 
         getMainProfile: function () {
