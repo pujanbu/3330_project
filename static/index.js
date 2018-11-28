@@ -293,9 +293,7 @@ new Vue({
                     this.getAllPosts();
                     this.getMainPosts();
                 })
-                .catch(err => {
-                    console.error(err);
-                });
+            // .catch(err => console.error(err));
         }
 
     }
