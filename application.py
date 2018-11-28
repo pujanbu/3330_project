@@ -408,6 +408,7 @@ def post_route():
             for p in profile.posts:
                 obj = get_dict(p)
                 obj['name'] = profile.first_name + ' ' + profile.last_name
+                obj['likes'] = get_dict_array(p.likes)
                 res.append(obj)
 
             return jsonify({"success": True, "posts": res})
@@ -426,6 +427,7 @@ def post_route():
             for p in page.posts:
                 obj = get_dict(p)
                 obj['name'] = page.name
+                obj['likes'] = get_dict_array(p.likes)
                 res.append(obj)
 
             return jsonify({"success": True, "posts": res})
@@ -445,6 +447,7 @@ def post_route():
                         ' ' + post.profile.last_name
                 elif post.page != None:
                     obj['name'] = post.page.name
+                obj['likes'] = get_dict_array(post.likes)
                 res.append(obj)
 
             return jsonify({"success": True, "posts": res})
