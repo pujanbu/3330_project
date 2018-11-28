@@ -28,7 +28,7 @@ new Vue({
             newPageDes: "",
             newPageCat: "",
 
-            message: "ll",
+            checkAdmin: false,
 
             likeCount: 15,
             commentCount: 5
@@ -47,14 +47,30 @@ new Vue({
             this.getAllPosts();
         },
 
-        userProfileClicked: function (id) {
-            this.selectedProfileId = id;
-            this.display = 'user';
-            this.getProfile();
-            this.getPosts();
+        clickedHome: function () {
+            this.getAllPosts();
+            this.display = 'home';
+        },
+
+        userProfileClicked: function (p) {
+            if (p.profile_id) {
+                this.selectedProfileId = p.profile_id;
+                this.display = 'user';
+                this.getProfile();
+                this.getPosts();
+            } else {
+                this.pageClicked(p.page_id)
+            }
         },
 
         pageClicked: function (id) {
+            for (let admin of this.currentUser.adminof) {
+                if (admin.id == id) {
+                    this.checkAdmin = true;
+                    console.log(this.checkAdmin);
+                }
+            }
+
             this.selectedPageId = id;
             this.selectedProfileId = id;
             this.getPages();
@@ -207,12 +223,10 @@ new Vue({
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    this.message = data.message;
                     this.getMainProfile();
                 })
                 .catch(err => {
                     console.error(err);
-                    this.message = data.message;
                 });
 
         },

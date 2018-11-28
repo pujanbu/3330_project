@@ -20,7 +20,7 @@
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
           <h2>{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
           <h3>Email: {{ currentUser.email }}</h3>
-          <br />{{ selectedProfileId }}
+          <br />
         </div>
         <div class="createPost">
           <h2>Create Post</h2>
@@ -30,7 +30,7 @@
         <div class="settings">
           <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
           <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="display='home'"></i><br />
+          <i class="fas fa-home" @click="clickedHome"></i><br />
           <i class=" fas
                         fa-user-alt" @click="display='profile'"></i>
         </div>
@@ -66,7 +66,7 @@
           <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="userImage" />
           <h2>{{ selectedUser.first_name }} {{ selectedUser.last_name }}</h2>
           <h3>Email: {{ selectedUser.email }}</h3>
-          <br />{{ selectedProfileId }}
+          <br />
         </div>
         <div class="createPost">
           <h2>{{ selectedUser.first_name }}'s Posts</h2>
@@ -74,7 +74,7 @@
         <div class="settings">
           <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
           <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="display='home'"></i><br />
+          <i class="fas fa-home" @click="clickedHome"></i><br />
           <i class=" fas
                             fa-user-alt" @click="display='profile'"></i>
         </div>
@@ -118,7 +118,7 @@
         <div class="settings">
           <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
           <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="display='home'"></i><br />
+          <i class="fas fa-home" @click="clickedHome"></i><br />
           <i class=" fas
                             fa-user-alt" @click="display='profile'"></i>
         </div>
@@ -129,8 +129,8 @@
         <div class="homePostViewArea">
           <div v-for="p in allUserPosts" class="post">
             <img src="https://images.freeimages.com/images/large-previews/664/friend-skateboarding-1171981.jpg" class="postUserImage" />
-            <h3 @click="userProfileClicked(p.profile_id)">
-              {{ p.profile_id }}
+            <h3 @click="userProfileClicked(p)">
+              {{ p.name }}
             </h3>
             <h5>{{ p.created_at }}</h5>
             <div class="postContent">
@@ -169,12 +169,11 @@
           <h3>Category:</h3>
           <input type="text" class="pageInputBox" v-model="newPageCat" /><br />
           <v-btn color="white" class="pageCreateButton" @click="createPage">Create</v-btn>
-          {{message}}
         </div>
         <div class="settings">
           <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
           <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="display='home'"></i><br />
+          <i class="fas fa-home" @click="clickedHome"></i><br />
           <i class=" fas
                             fa-user-alt" @click="display='profile'"></i>
         </div>
@@ -208,21 +207,26 @@
           <h3>Total Views: {{selectedPage.views}}</h3>
         </div>
         <div class="createPost">
-          <h2>Create Post</h2>
-          <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
-          <v-btn color="white" class="postButton" @click="postItP">POST</v-btn>
+          <div v-if="checkAdmin">
+            <h2>Create Post</h2>
+            <textarea v-model="newPost" rows="4" cols="50" class="postInput"></textarea>
+            <v-btn color="white" class="postButton" @click="postItP">POST</v-btn>
+          </div>
         </div>
         <div class="settings">
           <a href="/logout"><i class="fas fa-sign-out-alt"></i></a><br />
           <i class="fas fa-cog" @click="display='settings'"></i><br />
-          <i class="fas fa-home" @click="display='home'"></i><br />
+          <i class="fas fa-home" @click="clickedHome"></i><br />
           <i class=" fas
                         fa-user-alt" @click="display='profile'"></i>
         </div>
       </div>
 
       <div class="midArea">
-        <div class="userBioArea"></div>
+        <div class="userBioArea">
+          <h3>Category: {{selectedPage.category}}</h3>
+          <h3>Description: {{selectedPage.desc}}</h3>
+        </div>
         <div class="profilePostViewArea">
           <h2>{{selectedPage.name}}'s Posts</h2>
           <div v-for="p in selectedUserPosts" class="post">
