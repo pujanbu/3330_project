@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css?family=Slabo+27px');
+
+html {
+    margin: 1% 20% 1% 20%;
+    font-family: 'Slabo 27px', serif;
+
+}
+
+a {
+    color: black;
+}
+
+.title {
+    text-align: center;
+    font-size: 40px;
+}
+
+/* TOP AREA */
+.topArea {
+    /* border: solid 1px black; */
+    margin: 2px;
+}
+
+.userImageArea {
+    display: inline-block;
+}
+
+.userImageArea h2,
+h3 {
+    margin-left: 10px;
+}
+
+.userImage {
+    height: 200px;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+.createPost {
+    /* border: solid 1px black; */
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 50px;
+    padding-top: 50px;
+    height: 200px;
+    width: 500px;
+}
+
+.postInput {
+    border: solid 1px black;
+    height: 100px;
+    width: 500px;
+    font-size: 20px;
+}
+
+.postButton {
+    height: 20px;
+    float: right;
+}
+
+textarea {
+    resize: none;
+}
+
+.settings {
+    display: inline-block;
+    vertical-align: top;
+    /* border: solid 1px rgb(255, 0, 0); */
+    height: 220px;
+    margin-top: 10px;
+    margin-left: 50px;
+}
+
+/* FONTAWESOME */
+.fas {
+    font-size: 30px;
+    margin: 5px;
+}
+
+.fas:hover {
+    transform: scale(1.1);
+}
+
+
+/* MID AREA */
+.midArea {
+    /* border: solid 1px black; */
+}
+
+.userBioArea {
+    display: inline-block;
+    vertical-align: top;
+    /* border: solid 1px black; */
+    width: 200px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.profilePostViewArea {
+    display: inline-block;
+    vertical-align: top;
+    /* border: solid 1px black; */
+    margin-top: -30px;
+    margin-left: 50px;
+    width: 500px;
+    height: 90%;
+}
+
+.homePostViewArea {
+    display: inline-block;
+    vertical-align: top;
+    /* border: solid 1px black; */
+    margin-top: -200px;
+    margin-left: 50px;
+    width: 500px;
+    height: 90%;
+}
+
+.post {
+    height: 100px;
+    /* border: solid 1px rgb(196, 91, 50); */
+    margin: 30px 0 10px 0;
+}
+
+.postUserImage {
+    height: 50px;
+    width: 50px;
+    float: left;
+}
+
+.post h3,
+h5 {
+    margin-left: 55px;
+}
+
+.postContent {
+    /* border: solid 1px green; */
+    margin-top: 20px;
+}
+
+.postOptions {}
+
+.likeButton {
+    font-size: 20px;
+}
+
+.commentButton {
+    font-size: 20px;
+    margin-left: 20px;
+}
+
+/* SETTINGS */
+.pageInputBox {
+    width: 200px;
+    border: solid 1px black;
+    font-size: 20px;
+}
+
+.pageCreateButton {
+    height: 20px;
+    /* float: right; */
+}
+
+.myPagesViewArea {
+    display: inline-block;
+    vertical-align: top;
+    /* border: solid 1px black; */
+    margin-top: 50px;
+    margin-left: 50px;
+    width: 500px;
+    height: 90%;
+}
+
+
+.footerArea {
+    /* border: solid 1px black; */
+    text-align: center;
+    position: relative;
+}
