@@ -59,10 +59,10 @@
             <div class="usersList">
               <ol>
                 <li
-                  v-for="user in allUserPosts"
+                  v-for="(value,key) in uniqueUsers"
                   @click="userProfileClicked(user)"
                 >
-                  {{ user.name }}
+                  {{ key }}
                 </li>
               </ol>
             </div>
@@ -183,10 +183,10 @@
             <div class="usersList">
               <ol>
                 <li
-                  v-for="user in allUserPosts"
+                  v-for="(value,key) in uniqueUsers"
                   @click="userProfileClicked(user)"
                 >
-                  {{ user.name }}
+                  {{ key }}
                 </li>
               </ol>
             </div>
@@ -269,10 +269,10 @@
             <div class="usersList">
               <ol>
                 <li
-                  v-for="user in allUserPosts"
+                  v-for="(value,key) in uniqueUsers"
                   @click="userProfileClicked(user)"
                 >
-                  {{ user.name }}
+                  {{ key }}
                 </li>
               </ol>
             </div>

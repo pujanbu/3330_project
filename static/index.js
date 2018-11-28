@@ -6,6 +6,8 @@ new Vue({
 
             currentUser: {}, //logged in user
 
+            uniqueUsers: {},
+
             currentUserPosts: {},
 
             selectedUser: {}, //selected user for display
@@ -46,6 +48,16 @@ new Vue({
             // this.getMainProfile();
             this.getMainPosts();
             this.getAllPosts();
+        },
+
+        getUniqueUsers: function () {
+            for (let user of this.allUserPosts) {
+                if (!this.uniqueUsers[user.name]) {
+                    this.uniqueUsers[user.name] = 1;
+                }
+            }
+
+            return
         },
 
         clickedHome: function () {
@@ -182,6 +194,7 @@ new Vue({
                     console.log(data);
                     if (data.success) {
                         this.allUserPosts = data.posts;
+                        this.getUniqueUsers();
                     }
                 })
                 .catch(err => console.error(err));
