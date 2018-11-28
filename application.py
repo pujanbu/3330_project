@@ -153,6 +153,21 @@ def register():
 
 # api routes
 
+@app.route("/api/user", methods=["GET"])
+def all_user():
+    """
+        GET:    req: [null]
+                res: [profile]
+    """
+
+    profiles = Profile.query.all()
+    pages = Page.query.all()
+
+    # build response
+    res = get_dict_array(profiles)
+    res.extend(get_dict_array(pages))
+
+    return jsonify({"success": False, "profiles": res})
 
 @app.route("/api/profile", methods=["GET", "UPDATE", "DELETE"])
 def profile_route():
@@ -557,7 +572,7 @@ def like_route():
             if not post:
                 return jsonify({"success": False, "message": "Post doesn't exist!"})
 
-            past = Like.query.filter(and_(post_id=body['post_id'], page_id=body['page_id']))
+            past = Like.query.filter(and_(Like.post_id=body['post_id'], Like.page_id=body['page_id']))
 
             if past:
                 return jsonify({"success": False, "message": "Post already liked!"})
@@ -573,11 +588,11 @@ def like_route():
             if not post:
                 return jsonify({"success": False, "message": "Post doesn't exist!"})
 
-            past = Like.query.filter(and_(post_id=body['post_id'], profile_id=session.get('user_id')))
+            past = Like.query.filter(and_(Like.post_id=body['post_id'], Like.profile_id=session.get('user_id')))
 
             if past:
                 return jsonify({"success": False, "message": "Post already liked!"})
-            
+
             # add comment as logged in user
             like = Like(body['post_id'], session.get('user_id'), None)
             db.session.add(like)
