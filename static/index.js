@@ -6,6 +6,9 @@ new Vue({
 
             currentUser: {}, //logged in user
 
+            uniqueUsers: {},
+            uniquePages: {},
+
             currentUserPosts: {},
 
             selectedUser: {}, //selected user for display
@@ -43,7 +46,6 @@ new Vue({
 
     methods: {
         runAll: function () {
-            // this.getMainProfile();
             this.getMainPosts();
             this.getAllPosts();
         },
@@ -62,6 +64,17 @@ new Vue({
             } else {
                 this.pageClicked(p.page_id)
             }
+        },
+
+        userProfClicked: function (p) {
+            this.selectedProfileId = p.id;
+            this.display = 'user';
+            this.getProfile();
+            this.getPosts();
+        },
+
+        userPageClicked: function (p) {
+            this.pageClicked(p.id)
         },
 
         pageClicked: function (id) {
@@ -133,6 +146,7 @@ new Vue({
                     if (data.success) {
                         this.currentUser = data.profile;
                         this.selectedProfileId = data.profile.id;
+                        this.getUniqueUsers();
                         this.runAll();
                     }
                 })
@@ -182,6 +196,7 @@ new Vue({
                     console.log(data);
                     if (data.success) {
                         this.allUserPosts = data.posts;
+                        this.getUniqueUsers();
                     }
                 })
                 .catch(err => console.error(err));
@@ -294,6 +309,19 @@ new Vue({
                     this.getMainPosts();
                 })
             // .catch(err => console.error(err));
+        },
+
+        getUniqueUsers: function () {
+            fetch(`/api/user`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        this.uniquePages = data.pages;
+                        this.uniqueUsers = data.profiles;
+                    }
+                })
+                .catch(err => console.error(err));
         }
 
     }
