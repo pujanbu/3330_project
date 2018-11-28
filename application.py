@@ -588,7 +588,7 @@ def like_route():
                 obj['name'] = like.page.name
                 res.append(obj)
 
-        return jsonify({"success": True, "comments": res})
+        return jsonify({"success": True, "likes": res})
 
 
 if __name__ == "__main__":
