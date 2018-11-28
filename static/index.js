@@ -88,7 +88,7 @@ new Vue({
                 .then(data => {
                     console.log(data);
                     if (data.success) {
-
+                        location.reload()
                     }
                 })
                 .catch(err => console.error(err));
