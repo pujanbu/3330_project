@@ -7,6 +7,7 @@ new Vue({
             currentUser: {}, //logged in user
 
             uniqueUsers: {},
+            uniquePages: {},
 
             currentUserPosts: {},
 
@@ -49,15 +50,6 @@ new Vue({
             this.getAllPosts();
         },
 
-        getUniqueUsers: function () {
-            for (let user of this.allUserPosts) {
-                if (!this.uniqueUsers[user.name]) {
-                    this.uniqueUsers[user.name] = 1;
-                }
-            }
-            return
-        },
-
         clickedHome: function () {
             this.getAllPosts();
             this.display = 'home';
@@ -72,6 +64,17 @@ new Vue({
             } else {
                 this.pageClicked(p.page_id)
             }
+        },
+
+        userProfClicked: function (p) {
+            this.selectedProfileId = p.id;
+            this.display = 'user';
+            this.getProfile();
+            this.getPosts();
+        },
+
+        userPageClicked: function (p) {
+            this.pageClicked(p.id)
         },
 
         pageClicked: function (id) {
@@ -306,6 +309,19 @@ new Vue({
                     this.getMainPosts();
                 })
             // .catch(err => console.error(err));
+        },
+
+        getUniqueUsers: function () {
+            fetch(`/api/user`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        this.uniquePages = data.pages;
+                        this.uniqueUsers = data.profiles;
+                    }
+                })
+                .catch(err => console.error(err));
         }
 
     }

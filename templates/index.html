@@ -58,13 +58,15 @@
             <h3>Available Users/Pages:</h3>
             <div class="usersList">
               <ol>
-                <li
-                  v-for="(value,key) in uniqueUsers"
-                  @click="userProfileClicked(user)"
-                >
-                  {{ key }}
+                <li v-for="user in uniqueUsers" @click="userProfClicked(user)">
+                  {{ user.first_name }} {{ user.last_name }}
                 </li>
               </ol>
+              <ul>
+                <li v-for="page in uniquePages" @click="userPageClicked(page)">
+                  {{ page.name }}
+                </li>
+              </ul>
             </div>
           </div>
           <div class="profilePostViewArea">
@@ -182,13 +184,15 @@
             <h3>Available Users/Pages:</h3>
             <div class="usersList">
               <ol>
-                <li
-                  v-for="(value,key) in uniqueUsers"
-                  @click="userProfileClicked(user)"
-                >
-                  {{ key }}
+                <li v-for="user in uniqueUsers" @click="userProfClicked(user)">
+                  {{ user.first_name }} {{ user.last_name }}
                 </li>
               </ol>
+              <ul>
+                <li v-for="page in uniquePages" @click="userPageClicked(page)">
+                  {{ page.name }}
+                </li>
+              </ul>
             </div>
           </div>
           <div class="homePostViewArea">
@@ -264,19 +268,6 @@
         </div>
 
         <div class="midArea">
-          <div class="userBioArea">
-            <h3>Available Users/Pages:</h3>
-            <div class="usersList">
-              <ol>
-                <li
-                  v-for="(value,key) in uniqueUsers"
-                  @click="userProfileClicked(user)"
-                >
-                  {{ key }}
-                </li>
-              </ol>
-            </div>
-          </div>
           <div class="myPagesViewArea">
             <h2>My Pages</h2>
             <br />
