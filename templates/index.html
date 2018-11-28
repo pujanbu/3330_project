@@ -48,7 +48,7 @@
               <h4> {{ p.body }}</h4>
             </div>
             <div class="postOptions">
-              {{p.likes.length}}<i class="fas fa-thumbs-up likeButton"></i>
+              {{p.likes.length}}<i class="fas fa-thumbs-up likeButton" @click="likeClicked(p.id)"></i>
               <i class="fas fa-comment-alt commentButton"></i>({{
               commentCount
               }})&nbspView comments
@@ -93,7 +93,7 @@
               <h4> {{ p.body }}</h4>
             </div>
             <div class="postOptions">
-              {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
+              {{p.likes.length}}<i class="fas fa-thumbs-up likeButton" @click="likeClicked(p.id)"></i>
               <i class="fas fa-comment-alt commentButton"></i>({{
               commentCount
               }})&nbspView comments
@@ -137,7 +137,7 @@
               <h4> {{ p.body }}</h4>
             </div>
             <div class="postOptions">
-              {{ likeCount }}<i class="fas fa-thumbs-up likeButton"></i>
+              {{p.likes.length}}<i class="fas fa-thumbs-up likeButton" @click="likeClicked(p.id)"></i>
               <i class="fas fa-comment-alt commentButton"></i>({{
               commentCount
               }})&nbspView comments

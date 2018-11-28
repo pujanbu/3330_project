@@ -274,6 +274,28 @@ new Vue({
                     }
                 })
                 .catch(err => console.error(err));
+        },
+
+        likeClicked: function (id) {
+            fetch(`/api/page`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        post_id: id
+                    }),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    this.getAllPosts();
+                    this.getMainPosts();
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         }
 
     }
