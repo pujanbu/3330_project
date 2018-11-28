@@ -226,13 +226,16 @@ def profile_route():
         return jsonify({"success": False, "message": "Invalid request!"})
 
 
-@app.route("/api/page", methods=["GET", "POST"])
+@app.route("/api/page", methods=["GET", "POST", "UPDATE"])
 def page_route():
     """
         GET:    req: page_id
                 res: page
 
         POST:   req: name!, desc!, category?
+                res: success
+
+        UPDATE: req: page_id!, name?, desc?, category?
                 res: success
     """
 
@@ -275,7 +278,39 @@ def page_route():
         # commit to db
         db.session.commit()
 
-        return jsonify({"success": True})
+        return jsonify({"success": True, "page": get_dict(new)})
+
+    elif request.method == 'UPDATE':
+        # can only update after logged in
+        if session.get('user_id') is None:
+            return jsonify({"success": False, "message": "Not logged in!"})
+
+        # grab req body
+        body = request.get_json()
+
+        # body validation
+        if not body:
+            return jsonify({"success": False, "message": "No request body!"})
+        if 'page_id' not in body:
+            return jsonify({"success": False, "message": "Page id required!"})
+
+        # check if page exists
+        page = Page.query.get(body['page_id'])
+
+        if not page:
+            return jsonify({"success": False, "message": "Page doesn't exist!"})
+
+        # update fields provided
+        if 'name' in body:
+            page.name = body['name']
+        if 'desc' in body:
+            page.desc = body['desc']
+        if 'category' in body:
+            page.category = body['category']
+
+        db.session.commit()
+
+        return jsonify({"success": True, "page": get_dict(page)})
 
     else:
         # if page_id exists return the page object
