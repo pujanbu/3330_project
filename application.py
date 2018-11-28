@@ -557,8 +557,8 @@ def like_route():
             if not post:
                 return jsonify({"success": False, "message": "Post doesn't exist!"})
 
-            past = Like.query.filter(and_(post_id=body['post_id'], page_id=body['page_id']))
-
+            past = Like.query.filter(and_(Like.post_id==body['post_id'], Like.page_id==body['page_id'])).all()
+            print(body)
             if past:
                 return jsonify({"success": False, "message": "Post already liked!"})
 
@@ -573,9 +573,10 @@ def like_route():
             if not post:
                 return jsonify({"success": False, "message": "Post doesn't exist!"})
 
-            past = Like.query.filter(and_(post_id=body['post_id'], profile_id=session.get('user_id')))
-
+            past = Like.query.filter(and_(Like.post_id==body['post_id'], Like.profile_id==session.get('user_id'))).all()
+            print(body)
             if past:
+                print(past)
                 return jsonify({"success": False, "message": "Post already liked!"})
             
             # add comment as logged in user

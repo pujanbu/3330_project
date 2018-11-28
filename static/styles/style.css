@@ -36,6 +36,10 @@ h3 {
     margin-bottom: 10px;
 }
 
+.usersList {
+    font-size: 20px;
+}
+
 .createPost {
     /* border: solid 1px black; */
     display: inline-block;
