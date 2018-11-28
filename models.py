@@ -10,13 +10,13 @@ db = SQLAlchemy()
 
 
 # relationship between page and profile where profile is admin of page
-admins = db.Table('admins', db.Column('page_id', db.Integer, db.ForeignKey('page.id')),
-                  db.Column('profile_id', db.Integer, db.ForeignKey('profile.id')))
+admins = db.Table('admins', db.Column('page_id', db.Integer, db.ForeignKey('page.id', ondelete='CASCADE')),
+                  db.Column('profile_id', db.Integer, db.ForeignKey('profile.id', ondelete='CASCADE')))
 
 
 # relationship between page and profile where profile is member of page
-members = db.Table('members', db.Column('page_id', db.Integer, db.ForeignKey('page.id')),
-                   db.Column('profile_id', db.Integer, db.ForeignKey('profile.id')))
+members = db.Table('members', db.Column('page_id', db.Integer, db.ForeignKey('page.id', ondelete='CASCADE')),
+                   db.Column('profile_id', db.Integer, db.ForeignKey('profile.id', ondelete='CASCADE')))
 
 
 class Profile(db.Model):
@@ -31,7 +31,8 @@ class Profile(db.Model):
     created_at = db.Column(db.DateTime, default=func.now())
 
     # relations
-    posts = db.relationship("Post", backref="profile", lazy=True)
+    posts = db.relationship("Post", backref="profile",
+                            lazy=True, cascade='all,delete')
     like = db.relationship("Like", backref="profile", lazy=True)
 
     def __init__(self, first_name, last_name, email, username, password, mobile_no=""):
@@ -82,9 +83,9 @@ class Post(db.Model):
     comments = db.relationship("Comment", backref="post", lazy=True)
     likes = db.relationship("Like", backref="post", lazy=True)
     profile_id = db.Column(db.Integer, db.ForeignKey(
-        "profile.id"))
+        "profile.id", ondelete='CASCADE'))
     page_id = db.Column(db.Integer, db.ForeignKey(
-        "page.id"))
+        "page.id", ondelete='CASCADE'))
 
     def __init__(self, post_type, body, profile_id, page_id):
         self.post_type = post_type
@@ -103,11 +104,11 @@ class Comment(db.Model):
 
     # relations
     post_id = db.Column(db.Integer, db.ForeignKey(
-        "post.id"))
+        "post.id", ondelete='CASCADE'))
     profile_id = db.Column(db.Integer, db.ForeignKey(
-        "profile.id"))
+        "profile.id", ondelete='CASCADE'))
     page_id = db.Column(db.Integer, db.ForeignKey(
-        "page.id"))
+        "page.id", ondelete='CASCADE'))
 
     def __init__(self, body, post_id, profile_id, page_id):
         self.body = body
@@ -123,11 +124,11 @@ class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # relations
     post_id = db.Column(db.Integer, db.ForeignKey(
-        "post.id"))
+        "post.id", ondelete='CASCADE'))
     profile_id = db.Column(db.Integer, db.ForeignKey(
-        "profile.id"))
+        "profile.id", ondelete='CASCADE'))
     page_id = db.Column(db.Integer, db.ForeignKey(
-        "page.id"))
+        "page.id", ondelete='CASCADE'))
 
     def __init__(self, post_id, profile_id, page_id):
         self.post_id = post_id
