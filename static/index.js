@@ -45,7 +45,6 @@ new Vue({
 
     methods: {
         runAll: function () {
-            // this.getMainProfile();
             this.getMainPosts();
             this.getAllPosts();
         },
@@ -56,7 +55,6 @@ new Vue({
                     this.uniqueUsers[user.name] = 1;
                 }
             }
-
             return
         },
 
@@ -145,6 +143,7 @@ new Vue({
                     if (data.success) {
                         this.currentUser = data.profile;
                         this.selectedProfileId = data.profile.id;
+                        this.getUniqueUsers();
                         this.runAll();
                     }
                 })
