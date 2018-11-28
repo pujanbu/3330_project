@@ -3,9 +3,10 @@
 import os
 from flask import Flask, jsonify, request, session, send_file, flash, render_template, redirect
 from flask_session import Session
-from models import *
+from sqlalchemy import and_
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from models import *
 from helpers import login_required, get_dict, get_dict_array
 
 # Check for environment variable
@@ -551,12 +552,32 @@ def like_route():
             if not page:
                 return jsonify({"success": False, "message": "Page doesn't exist!"})
 
+            # check if it's been liked
+            post = Post.query.get(body['post_id'])
+            if not post:
+                return jsonify({"success": False, "message": "Post doesn't exist!"})
+
+            past = Like.query.filter(and_(post_id=body['post_id'], page_id=body['page_id']))
+
+            if past:
+                return jsonify({"success": False, "message": "Post already liked!"})
+
             like = Like(body['post_id'], None, body['page_id'])
             db.session.add(like)
             db.session.commit()
 
             return jsonify({"success": True})
         else:
+            # check if it's been liked
+            post = Post.query.get(body['post_id'])
+            if not post:
+                return jsonify({"success": False, "message": "Post doesn't exist!"})
+
+            past = Like.query.filter(and_(post_id=body['post_id'], profile_id=session.get('user_id')))
+
+            if past:
+                return jsonify({"success": False, "message": "Post already liked!"})
+            
             # add comment as logged in user
             like = Like(body['post_id'], session.get('user_id'), None)
             db.session.add(like)
